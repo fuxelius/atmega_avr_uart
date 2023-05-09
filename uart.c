@@ -102,7 +102,7 @@ volatile uint8_t usart5_error;	// Keeps error from RXDATAH
 void usart0_send_char(char c) {
 	while(rbuffer_full(&rb_tx0));
 	rbuffer_insert(c, &rb_tx0);
-	USART0.CTRLA |= USART_DREIE_bm;
+	USART0.CTRLA |= USART_DREIE_bm;					// Enable Tx interrupt 
 }
 
 int usart0_print_char(char c, FILE *stream) { 
@@ -159,7 +159,7 @@ void usart0_close(void) {
 void usart1_send_char(char c) {
 	while(rbuffer_full(&rb_tx1));
 	rbuffer_insert(c, &rb_tx1);
-	USART1.CTRLA |= USART_DREIE_bm;
+	USART1.CTRLA |= USART_DREIE_bm;					// Enable Tx interrupt
 }
 
 int usart1_print_char(char c, FILE *stream) { 
@@ -216,7 +216,7 @@ void usart1_close(void) {
 void usart2_send_char(char c) {
 	while(rbuffer_full(&rb_tx2));
 	rbuffer_insert(c, &rb_tx2);
-	USART2.CTRLA |= USART_DREIE_bm;
+	USART2.CTRLA |= USART_DREIE_bm;					// Enable Tx interrupt
 }
 
 int usart2_print_char(char c, FILE *stream) { 
@@ -273,7 +273,7 @@ void usart2_close(void) {
 void usart3_send_char(char c) {
 	while(rbuffer_full(&rb_tx3));
 	rbuffer_insert(c, &rb_tx3);
-	USART3.CTRLA |= USART_DREIE_bm;
+	USART3.CTRLA |= USART_DREIE_bm;					// Enable Tx interrupt
 }
 
 int usart3_print_char(char c, FILE *stream) { 
@@ -330,7 +330,7 @@ void usart3_close(void) {
 void usart4_send_char(char c) {
 	while(rbuffer_full(&rb_tx4));
 	rbuffer_insert(c, &rb_tx4);
-	USART4.CTRLA |= USART_DREIE_bm;
+	USART4.CTRLA |= USART_DREIE_bm;					// Enable Tx interrupt
 }
 
 int usart4_print_char(char c, FILE *stream) { 
@@ -387,7 +387,7 @@ void usart4_close(void) {
 void usart5_send_char(char c) {
 	while(rbuffer_full(&rb_tx5));
 	rbuffer_insert(c, &rb_tx5);
-	USART5.CTRLA |= USART_DREIE_bm;
+	USART5.CTRLA |= USART_DREIE_bm;					// Enable Tx interrupt
 }
 
 int usart5_print_char(char c, FILE *stream) { 

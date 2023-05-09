@@ -1,18 +1,15 @@
 # Interrupt driven and buffered UART for megaAVR 0-series
-This UART library was initially developed for a bare metal atmega4808 project. It is general enough to be adapted for UART1, UART2 and UART3. It will for sure work for the entire **megaAVR 0-series** which it was primarily developed for.
+This UART library was initially developed for a bare metal atmega4808 project. It is general enough to be adapted for any UARTn (supports up to 6 USARTs depending on MCU). It will for sure work for the entire **megaAVR 0-series** which it was primarily developed for. The code is more or less self-explanatory. Where issues may arise I have tried to comment it sparingly.
 
 **megaAVR 0-series**: which consists of ATmega808, ATmega809, ATmega1608, ATmega1609, ATmega3208, ATmega3209, ATmega4808 and ATmega4809.
 
-It should also work on following series:
+It should also work on the following series:
 
 **tinyAVR 0-series**: ATtiny202, ATtiny402, ATtiny204, ATtiny404, ATtiny804, ATtiny1604, ATtiny406, ATtiny806, ATtiny1606, ATtiny807 and ATtiny1607
 
 **tinyAVR 1-series**: ATtiny212, ATtiny412, ATtiny214, ATtiny414, ATtiny814, ATtiny1614, ATtiny416, ATtiny816, ATtiny1616, ATtiny3216, ATtiny417, ATtiny817, ATtiny1617 and ATtiny3217 
 
-
-**AVR DA devices**: 
-
-
+**AVR DA devices**: AVR32DA28, AVR64DA28, AVR128DA28, AVR32DA32, AVR64DA32, AVR128DA32, AVR32DA48, AVR64DA48, AVR128DA48, AVR64DA64, AVR128DA64
 
 It is based on a technical brief article from Microchip [TB3216](https://ww1.microchip.com/downloads/en/Appnotes/TB3216-Getting-Started-with-USART-DS90003216.pdf)
 and I have tried to follow it as close as possible in functionality and naming of functions. 
