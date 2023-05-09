@@ -3,16 +3,16 @@
  *
  *          Project:  UART for ATmega4808
  *          Author:   Hans-Henrik Fuxelius   
- *          Date:     2023-05-02           
+ *          Date:     2023-05-08           
  */
 
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // DEFINE RING BUFFER SIZE; must be 2, 4, 8, 16, 32, 64, 128 or 256 
-#define RBUFFER_SIZE 64  
+#define RBUFFER_SIZE 32  
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-// DEFINE ACTIVE UNITS
+// ENABLE USART UNITS
 #define USART0_ENABLE
 // #define USART1_ENABLE
 // #define USART2_ENABLE

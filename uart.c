@@ -3,7 +3,7 @@
  *
  *          Project:  UART for ATmega4808
  *          Author:   Hans-Henrik Fuxelius   
- *          Date:     2023-05-02           
+ *          Date:     2023-05-08           
  */
 
 #include <util/atomic.h>
@@ -100,6 +100,7 @@ volatile uint8_t usart5_error;	// Keeps error from RXDATAH
 // USART0 FUNCTIONS
 #ifdef USART0_ENABLE
 void usart0_send_char(char c) {
+	while(rbuffer_full(&rb_tx0));
 	rbuffer_insert(c, &rb_tx0);
 	USART0.CTRLA |= USART_DREIE_bm;
 }
@@ -156,6 +157,7 @@ void usart0_close(void) {
 // USART1 FUNCTIONS
 #ifdef USART1_ENABLE
 void usart1_send_char(char c) {
+	while(rbuffer_full(&rb_tx1));
 	rbuffer_insert(c, &rb_tx1);
 	USART1.CTRLA |= USART_DREIE_bm;
 }
@@ -212,6 +214,7 @@ void usart1_close(void) {
 // USART2 FUNCTIONS
 #ifdef USART2_ENABLE
 void usart2_send_char(char c) {
+	while(rbuffer_full(&rb_tx2));
 	rbuffer_insert(c, &rb_tx2);
 	USART2.CTRLA |= USART_DREIE_bm;
 }
@@ -268,6 +271,7 @@ void usart2_close(void) {
 // USART3 FUNCTIONS
 #ifdef USART3_ENABLE
 void usart3_send_char(char c) {
+	while(rbuffer_full(&rb_tx3));
 	rbuffer_insert(c, &rb_tx3);
 	USART3.CTRLA |= USART_DREIE_bm;
 }
@@ -324,6 +328,7 @@ void usart3_close(void) {
 // USART4 FUNCTIONS
 #ifdef USART4_ENABLE
 void usart4_send_char(char c) {
+	while(rbuffer_full(&rb_tx4));
 	rbuffer_insert(c, &rb_tx4);
 	USART4.CTRLA |= USART_DREIE_bm;
 }
@@ -380,6 +385,7 @@ void usart4_close(void) {
 // USART5 FUNCTIONS
 #ifdef USART5_ENABLE
 void usart5_send_char(char c) {
+	while(rbuffer_full(&rb_tx5));
 	rbuffer_insert(c, &rb_tx5);
 	USART5.CTRLA |= USART_DREIE_bm;
 }
