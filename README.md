@@ -54,24 +54,24 @@ Here is a short overview of how to use the library.
     usart0_send_string("\r\n\r\nPEACE BRO!\r\n\r\n", 18);
 
     // (4) - Use printf to write to UART
-    printf("Hello world!\r\n");
+    fprintf(&USART0_stream, "Hello world!\r\n");
 
     for(uint8_t i=0; i<5; i++) {
         // (5) - Use formatted printf to write to UART
-        printf("\r\nCounter value is: 0x%02X ", j++);
+        fprintf(&USART0_stream, "\r\nCounter value is: 0x%02X ", j++);
         _delay_ms(500);
 
         // (6) - Get UART input by polling ringbuffer
         while(!((c = usart0_read_char()) & UART_NO_DATA)) {
 
             if (c & UART_PARITY_ERROR) {
-                printf("UART PARITY ERROR: ");
+                fprintf(&USART0_stream, "UART PARITY ERROR: ");
             }
             if (c & UART_FRAME_ERROR) {
-                printf("UART FRAME ERROR: ");
+                fprintf(&USART0_stream, "UART FRAME ERROR: ");
             }
             if (c & UART_BUFFER_OVERFLOW) {
-                printf("UART BUFFER OVERFLOW ERROR: ");
+                fprintf(&USART0_stream, "UART BUFFER OVERFLOW ERROR: ");
             }
 
             // (7) - Send single character to UART
@@ -80,7 +80,7 @@ Here is a short overview of how to use the library.
     }
 
     // (8) - Check that everything is printed before closing UART
-    printf("\r\n\r\n<-<->->");
+    fprintf(&USART0_stream, "\r\n\r\n<-<->->");
 
     // (9) - Close UART0
     usart0_close();    

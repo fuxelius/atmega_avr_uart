@@ -14,7 +14,7 @@
 #include "uart_settings.h"
 #include "uart.h"
 
-#define UART_RX_ERROR_MASK (USART_BUFOVF_bm | USART_FERR_bm | USART_PERR_bm) // [Datasheet ss. 295]
+#define USART_RX_ERROR_MASK (USART_BUFOVF_bm | USART_FERR_bm | USART_PERR_bm) // [Datasheet ss. 295]
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // RINGBUFFER STRUCT
@@ -130,10 +130,10 @@ void usart0_send_string(char* str, uint8_t len) {
 
 uint16_t usart0_read_char(void) {
 	if (!rbuffer_empty(&rb_rx0)) {
-		return (((usart0_error & UART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&rb_rx0));
+		return (((usart0_error & USART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&rb_rx0));
 	}
 	else {
-		return (((usart0_error & UART_RX_ERROR_MASK) << 8) | UART_NO_DATA);		// Empty ringbuffer
+		return (((usart0_error & USART_RX_ERROR_MASK) << 8) | USART_NO_DATA);		// Empty ringbuffer
 	}
 }
 
@@ -186,10 +186,10 @@ void usart1_send_string(char* str, uint8_t len) {
 
 uint16_t usart1_read_char(void) {
 	if (!rbuffer_empty(&rb_rx1)) {
-		return (((usart1_error & UART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&rb_rx1));
+		return (((usart1_error & USART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&rb_rx1));
 	}
 	else {
-		return (((usart1_error & UART_RX_ERROR_MASK) << 8) | UART_NO_DATA);		// Empty ringbuffer
+		return (((usart1_error & USART_RX_ERROR_MASK) << 8) | USART_NO_DATA);		// Empty ringbuffer
 	}
 }
 
@@ -242,10 +242,10 @@ void usart2_send_string(char* str, uint8_t len) {
 
 uint16_t usart2_read_char(void) {
 	if (!rbuffer_empty(&rb_rx2)) {
-		return (((usart2_error & UART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&rb_rx2));
+		return (((usart2_error & USART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&rb_rx2));
 	}
 	else {
-		return (((usart2_error & UART_RX_ERROR_MASK) << 8) | UART_NO_DATA);		// Empty ringbuffer
+		return (((usart2_error & USART_RX_ERROR_MASK) << 8) | USART_NO_DATA);		// Empty ringbuffer
 	}
 }
 
@@ -298,10 +298,10 @@ void usart3_send_string(char* str, uint8_t len) {
 
 uint16_t usart3_read_char(void) {
 	if (!rbuffer_empty(&rb_rx3)) {
-		return (((usart3_error & UART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&rb_rx3));
+		return (((usart3_error & USART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&rb_rx3));
 	}
 	else {
-		return (((usart3_error & UART_RX_ERROR_MASK) << 8) | UART_NO_DATA);		// Empty ringbuffer
+		return (((usart3_error & USART_RX_ERROR_MASK) << 8) | USART_NO_DATA);		// Empty ringbuffer
 	}
 }
 
@@ -354,10 +354,10 @@ void usart4_send_string(char* str, uint8_t len) {
 
 uint16_t usart4_read_char(void) {
 	if (!rbuffer_empty(&rb_rx4)) {
-		return (((usart4_error & UART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&rb_rx4));
+		return (((usart4_error & USART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&rb_rx4));
 	}
 	else {
-		return (((usart4_error & UART_RX_ERROR_MASK) << 8) | UART_NO_DATA);		// Empty ringbuffer
+		return (((usart4_error & USART_RX_ERROR_MASK) << 8) | USART_NO_DATA);		// Empty ringbuffer
 	}
 }
 
@@ -410,10 +410,10 @@ void usart5_send_string(char* str, uint8_t len) {
 
 uint16_t usart5_read_char(void) {
 	if (!rbuffer_empty(&rb_rx5)) {
-		return (((usart5_error & UART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&rb_rx5));
+		return (((usart5_error & USART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&rb_rx5));
 	}
 	else {
-		return (((usart5_error & UART_RX_ERROR_MASK) << 8) | UART_NO_DATA);		// Empty ringbuffer
+		return (((usart5_error & USART_RX_ERROR_MASK) << 8) | USART_NO_DATA);		// Empty ringbuffer
 	}
 }
 

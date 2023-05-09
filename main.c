@@ -37,16 +37,16 @@ int main(void) {
             _delay_ms(500);
 
             // (6) - Get UART input by polling ringbuffer
-            while(!((c = usart0_read_char()) & UART_NO_DATA)) {
+            while(!((c = usart0_read_char()) & USART_NO_DATA)) {
 
-                if (c & UART_PARITY_ERROR) {
-                    fprintf(&USART0_stream, "UART PARITY ERROR: ");
+                if (c & USART_PARITY_ERROR) {
+                    fprintf(&USART0_stream, "USART PARITY ERROR: ");
                 }
-                if (c & UART_FRAME_ERROR) {
-                    fprintf(&USART0_stream, "UART FRAME ERROR: ");
+                if (c & USART_FRAME_ERROR) {
+                    fprintf(&USART0_stream, "USART FRAME ERROR: ");
                 }
-                if (c & UART_BUFFER_OVERFLOW) {
-                    fprintf(&USART0_stream, "UART BUFFER OVERFLOW ERROR: ");
+                if (c & USART_BUFFER_OVERFLOW) {
+                    fprintf(&USART0_stream, "USART BUFFER OVERFLOW ERROR: ");
                 }
 
                 // (7) - Send single character to UART
