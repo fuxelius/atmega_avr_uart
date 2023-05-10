@@ -1,7 +1,7 @@
 /*
  *     uart.c
  *
- *          Project:  UART for ATmega4808
+ *          Project:  UART for megaAVR, tinyAVR & AVR DA
  *          Author:   Hans-Henrik Fuxelius   
  *          Date:     2023-05-08           
  */
@@ -63,37 +63,37 @@ char rbuffer_remove(volatile ringbuffer* rb) {
 #ifdef USART0_ENABLE
 volatile ringbuffer rb_rx0;		// Receive 
 volatile ringbuffer rb_tx0;		// Transmit
-volatile uint8_t usart0_error;	// Keeps error from RXDATAH
+volatile uint8_t usart0_error;	// Holds error from RXDATAH
 #endif
 
 #ifdef USART1_ENABLE
 volatile ringbuffer rb_rx1;		// Receive 
 volatile ringbuffer rb_tx1;		// Transmit
-volatile uint8_t usart1_error;	// Keeps error from RXDATAH
+volatile uint8_t usart1_error;	// Holds error from RXDATAH
 #endif
 
 #ifdef USART2_ENABLE
 volatile ringbuffer rb_rx2;		// Receive 
 volatile ringbuffer rb_tx2;		// Transmit
-volatile uint8_t usart2_error;	// Keeps error from RXDATAH
+volatile uint8_t usart2_error;	// Holds error from RXDATAH
 #endif
 
 #ifdef USART3_ENABLE
 volatile ringbuffer rb_rx3;		// Receive 
 volatile ringbuffer rb_tx3;		// Transmit
-volatile uint8_t usart3_error;	// Keeps error from RXDATAH
+volatile uint8_t usart3_error;	// Holds error from RXDATAH
 #endif
 
 #ifdef USART4_ENABLE
 volatile ringbuffer rb_rx4;		// Receive 
 volatile ringbuffer rb_tx4;		// Transmit
-volatile uint8_t usart4_error;	// Keeps error from RXDATAH
+volatile uint8_t usart4_error;	// Holds error from RXDATAH
 #endif
 
 #ifdef USART5_ENABLE
 volatile ringbuffer rb_rx5;		// Receive 
 volatile ringbuffer rb_tx5;		// Transmit
-volatile uint8_t usart5_error;	// Keeps error from RXDATAH
+volatile uint8_t usart5_error;	// Holds error from RXDATAH
 #endif
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
@@ -115,9 +115,7 @@ FILE USART0_stream = FDEV_SETUP_STREAM(usart0_print_char, NULL, _FDEV_SETUP_WRIT
 void usart0_init(uint16_t baud_rate) {
 	rbuffer_init(&rb_rx0);							// Init RX0 buffer
 	rbuffer_init(&rb_tx0);							// Init TX0 buffer
-	
 	usart0_port_init();								// Defined in uart_settings.h
-
     USART0.BAUD = baud_rate; 						// Set BAUD rate
 	USART0.CTRLB |= USART_RXEN_bm | USART_TXEN_bm; 	// Enable Rx & Enable Tx 
 	USART0.CTRLA |= USART_RXCIE_bm ; 				// Enable Rx interrupt 
@@ -143,7 +141,7 @@ void usart0_close(void) {
 	while(!rbuffer_empty(&rb_tx0)); 				// Wait for Tx to finish all character in ring buffer
 	while(!(USART0.STATUS & USART_DREIF_bm)); 		// Wait for Tx unit to finish the last character of ringbuffer
 
-	_delay_ms(200); 								// Extra safety for Tx to finish!
+	// _delay_ms(200); 								// Extra safety for Tx to finish!
 
 	USART0.CTRLB &= ~USART_RXEN_bm; 				// Disable Rx unit
 	USART0.CTRLB &= ~USART_TXEN_bm; 				// Disable Rx unit
@@ -172,9 +170,7 @@ FILE USART1_stream = FDEV_SETUP_STREAM(usart1_print_char, NULL, _FDEV_SETUP_WRIT
 void usart1_init(uint16_t baud_rate) {
 	rbuffer_init(&rb_rx1);							// Init RX1 buffer
 	rbuffer_init(&rb_tx1);							// Init TX1 buffer
-	
 	usart1_port_init();								// Defined in uart_settings.h
-
     USART1.BAUD = baud_rate; 						// Set BAUD rate
 	USART1.CTRLB |= USART_RXEN_bm | USART_TXEN_bm; 	// Enable Rx & Enable Tx 
 	USART1.CTRLA |= USART_RXCIE_bm ; 				// Enable Rx interrupt 
@@ -200,7 +196,7 @@ void usart1_close(void) {
 	while(!rbuffer_empty(&rb_tx1)); 				// Wait for Tx to finish all character in ring buffer
 	while(!(USART1.STATUS & USART_DREIF_bm)); 		// Wait for Tx unit to finish the last character of ringbuffer
 
-	_delay_ms(200); 								// Extra safety for Tx to finish!
+	// _delay_ms(200); 								// Extra safety for Tx to finish!
 
 	USART1.CTRLB &= ~USART_RXEN_bm; 				// Disable Rx unit
 	USART1.CTRLB &= ~USART_TXEN_bm; 				// Disable Rx unit
@@ -229,9 +225,7 @@ FILE USART2_stream = FDEV_SETUP_STREAM(usart2_print_char, NULL, _FDEV_SETUP_WRIT
 void usart2_init(uint16_t baud_rate) {
 	rbuffer_init(&rb_rx2);							// Init RX2 buffer
 	rbuffer_init(&rb_tx2);							// Init TX2 buffer
-	
 	usart2_port_init();								// Defined in uart_settings.h
-
     USART2.BAUD = baud_rate; 						// Set BAUD rate
 	USART2.CTRLB |= USART_RXEN_bm | USART_TXEN_bm; 	// Enable Rx & Enable Tx 
 	USART2.CTRLA |= USART_RXCIE_bm ; 				// Enable Rx interrupt 
@@ -257,7 +251,7 @@ void usart2_close(void) {
 	while(!rbuffer_empty(&rb_tx2)); 				// Wait for Tx to finish all character in ring buffer
 	while(!(USART2.STATUS & USART_DREIF_bm)); 		// Wait for Tx unit to finish the last character of ringbuffer
 
-	_delay_ms(200); 								// Extra safety for Tx to finish!
+	// _delay_ms(200); 								// Extra safety for Tx to finish!
 
 	USART2.CTRLB &= ~USART_RXEN_bm; 				// Disable Rx unit
 	USART2.CTRLB &= ~USART_TXEN_bm; 				// Disable Rx unit
@@ -286,9 +280,7 @@ FILE USART3_stream = FDEV_SETUP_STREAM(usart3_print_char, NULL, _FDEV_SETUP_WRIT
 void usart3_init(uint16_t baud_rate) {
 	rbuffer_init(&rb_rx3);							// Init RX3 buffer
 	rbuffer_init(&rb_tx3);							// Init TX3 buffer
-	
 	usart3_port_init();								// Defined in uart_settings.h
-
     USART3.BAUD = baud_rate; 						// Set BAUD rate
 	USART3.CTRLB |= USART_RXEN_bm | USART_TXEN_bm; 	// Enable Rx & Enable Tx 
 	USART3.CTRLA |= USART_RXCIE_bm ; 				// Enable Rx interrupt 
@@ -314,7 +306,7 @@ void usart3_close(void) {
 	while(!rbuffer_empty(&rb_tx3)); 				// Wait for Tx to finish all character in ring buffer
 	while(!(USART3.STATUS & USART_DREIF_bm)); 		// Wait for Tx unit to finish the last character of ringbuffer
 
-	_delay_ms(200); 								// Extra safety for Tx to finish!
+	// _delay_ms(200); 								// Extra safety for Tx to finish!
 
 	USART3.CTRLB &= ~USART_RXEN_bm; 				// Disable Rx unit
 	USART3.CTRLB &= ~USART_TXEN_bm; 				// Disable Rx unit
@@ -343,9 +335,7 @@ FILE USART4_stream = FDEV_SETUP_STREAM(usart4_print_char, NULL, _FDEV_SETUP_WRIT
 void usart4_init(uint16_t baud_rate) {
 	rbuffer_init(&rb_rx4);							// Init RX4 buffer
 	rbuffer_init(&rb_tx4);							// Init TX4 buffer
-	
 	usart4_port_init();								// Defined in uart_settings.h
-
     USART4.BAUD = baud_rate; 						// Set BAUD rate
 	USART4.CTRLB |= USART_RXEN_bm | USART_TXEN_bm; 	// Enable Rx & Enable Tx 
 	USART4.CTRLA |= USART_RXCIE_bm ; 				// Enable Rx interrupt 
@@ -371,7 +361,7 @@ void usart4_close(void) {
 	while(!rbuffer_empty(&rb_tx4)); 				// Wait for Tx to finish all character in ring buffer
 	while(!(USART4.STATUS & USART_DREIF_bm)); 		// Wait for Tx unit to finish the last character of ringbuffer
 
-	_delay_ms(200); 								// Extra safety for Tx to finish!
+	// _delay_ms(200); 								// Extra safety for Tx to finish!
 
 	USART4.CTRLB &= ~USART_RXEN_bm; 				// Disable Rx unit
 	USART4.CTRLB &= ~USART_TXEN_bm; 				// Disable Rx unit
@@ -400,9 +390,7 @@ FILE USART5_stream = FDEV_SETUP_STREAM(usart5_print_char, NULL, _FDEV_SETUP_WRIT
 void usart5_init(uint16_t baud_rate) {
 	rbuffer_init(&rb_rx5);							// Init RX5 buffer
 	rbuffer_init(&rb_tx5);							// Init TX5 buffer
-	
 	usart5_port_init();								// Defined in uart_settings.h
-
     USART5.BAUD = baud_rate; 						// Set BAUD rate
 	USART5.CTRLB |= USART_RXEN_bm | USART_TXEN_bm; 	// Enable Rx & Enable Tx 
 	USART5.CTRLA |= USART_RXCIE_bm ; 				// Enable Rx interrupt 
@@ -428,7 +416,7 @@ void usart5_close(void) {
 	while(!rbuffer_empty(&rb_tx5)); 				// Wait for Tx to finish all character in ring buffer
 	while(!(USART5.STATUS & USART_DREIF_bm)); 		// Wait for Tx unit to finish the last character of ringbuffer
 
-	_delay_ms(200); 								// Extra safety for Tx to finish!
+	// _delay_ms(200); 								// Extra safety for Tx to finish!
 
 	USART5.CTRLB &= ~USART_RXEN_bm; 				// Disable Rx unit
 	USART5.CTRLB &= ~USART_TXEN_bm; 				// Disable Rx unit

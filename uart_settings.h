@@ -1,7 +1,7 @@
 /*
  *     uart_settings.h
  *
- *          Project:  UART for ATmega4808
+ *          Project:  UART for megaAVR, tinyAVR & AVR DA
  *          Author:   Hans-Henrik Fuxelius   
  *          Date:     2023-05-08           
  */
