@@ -8,11 +8,11 @@
 
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-// DEFINE RING BUFFER SIZE; must be 2, 4, 8, 16, 32, 64 or 128  
+// DEFINE RING BUFFER SIZE; MUST BE 2, 4, 8, 16, 32, 64 or 128  
 #define RBUFFER_SIZE 32  
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-// ENABLE USART UNITS
+// ENABLE USART UNITS (UNCOMMENT USARTn TO ENABLE)
 #define USART0_ENABLE
 // #define USART1_ENABLE
 // #define USART2_ENABLE
@@ -21,7 +21,7 @@
 // #define USART5_ENABLE
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-// PORTMUX & PINOUT
+// PORTMUX & PINOUT (DO NOT TOUCH THESE)
 #ifdef USART0_ENABLE
 void usart0_port_init(void);
 #endif

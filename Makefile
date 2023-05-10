@@ -1,6 +1,6 @@
 # Name:   Makefile
 # Author: Hans-Henrik Fuxelius
-# Date:   2023-05-02
+# Date:   2023-05-08
 
 # DEVICE ....... The AVR device you compile for
 # CLOCK ........ Target AVR clock rate in Hertz

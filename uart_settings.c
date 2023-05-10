@@ -10,7 +10,8 @@
 #include "uart_settings.h"
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-// ASSIGN PORTMUX & PINOUT
+// ASSIGN PORTMUX & PINOUT (DEFINE PORTMUX AND PINS FOR EACH USARTn)
+// asm("NOP"); is a just placeholder for NO OPERATION, JUST RELACE IT!
 #ifdef USART0_ENABLE
 void usart0_port_init(void) {
     asm("NOP");                         // PORTMUX
