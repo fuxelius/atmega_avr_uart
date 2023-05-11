@@ -1,18 +1,8 @@
 # Interrupt driven and buffered UART for tiny- and megaAVR
 This UART library is loosely based on a technical brief article from Microchip [TB3216](https://ww1.microchip.com/downloads/en/Appnotes/TB3216-Getting-Started-with-USART-DS90003216.pdf)
-and I have tried to follow it as close as possible in functionality and naming conventions.  It is general enough to be adapted for any UARTn (supports up to 6 USARTs depending on MCU).   The library size compiled is **~900 bytes** with one USART and without *fprintf*. It is **~2700 bytes** with the library for *fprintf* linked in. The code is more or less self-explanatory. At some well choosen places I have tried to comment it sparingly.
+that I have tried to adhere to in function and naming conventions. The library supports up to 6 cuncurrent USART.  They can be enabled in any order and number as long as it is supported by the microcontroller. Each USART has its own circular buffer and code, so they work fully independent of each other.
 
-<img src="doc/pic/DevBoard.png"  width="400">
-
-> Avove PCB was designed for development of low powered battery operation
-
-It was initially developed for a [bare metal atmega4808](https://github.com/fuxelius/atmega4808_bare_metal) project and the structure in the repository reflect this heritage. If  you use the ATmega4808 and USART0 it will compile out of the box, otherwise some settings must be done before it works. The setup process will be outlined below.
-
-<img src="doc/pic/closeup.png"  width="400">
-
-> Standard Arduino Nano Every development board
-
-**P.S.** As a convenience for you to rapidly test and evaluate this library I have also [applied it ](https://github.com/fuxelius/atmega_avr_uart_nano_every) to the [Arduino Nano Every](https://docs.arduino.cc/hardware/nano-every) with an ATmega4809 MCU. The setup for how to compile is detailed in [C Programming for 'Arduino Nano Every' Board (ATmega4809) with a Mac and VS Code](https://github.com/fuxelius/nano_every_bare_metal#c-programming-for-arduino-nano-every-board-atmega4809-with-a-mac-and-vs-code)
+The library size compiled is **~900 bytes** with one USART and without usage of the `fprintf` function. It is **~2700 bytes** with the library for `fprintf` linked in. The code is more or less self-explanatory. At  places I have tried to comment it sparingly.
 
 ## Intended devices
 
@@ -24,6 +14,17 @@ It was initially developed for a [bare metal atmega4808](https://github.com/fuxe
 
 **AVR DA devices**: AVR32DA28, AVR64DA28, AVR128DA28, AVR32DA32, AVR64DA32, AVR128DA32, AVR32DA48, AVR64DA48, AVR128DA48, AVR64DA64, AVR128DA64
 
+This library was initially developed for a [bare metal atmega4808](https://github.com/fuxelius/atmega4808_bare_metal) project. If you use the ATmega4808 and USART0 it will compile out of the box, otherwise some settings must be done before it works. The setup process of the library is direct and will be outlined below.
+
+<img src="doc/pic/DevBoard.png"  width="400">
+
+> A development board was designed for low powered battery operation
+
+**P.S.** As a convenience for you to rapidly test and evaluate this library I have also [applied it ](https://github.com/fuxelius/atmega_avr_uart_nano_every) to the [Arduino Nano Every](https://docs.arduino.cc/hardware/nano-every) with an ATmega4809 MCU. The setup for how to compile is detailed in [C Programming for 'Arduino Nano Every' Board (ATmega4809) with a Mac and VS Code](https://github.com/fuxelius/nano_every_bare_metal#c-programming-for-arduino-nano-every-board-atmega4809-with-a-mac-and-vs-code)
+
+<img src="doc/pic/closeup.png"  width="400">
+
+> Standard Arduino Nano Every development board
 
 ## Setting up parameters
 All setting for the library is done in `uart_settings.h` and `uart_settings.c` 
