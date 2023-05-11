@@ -1,8 +1,12 @@
 # Interrupt driven and buffered UART for tiny- and megaAVR
-This UART library is loosely based on a technical brief article from Microchip [TB3216](https://ww1.microchip.com/downloads/en/Appnotes/TB3216-Getting-Started-with-USART-DS90003216.pdf)
-that I have tried to adhere to in function and naming conventions. The library supports up to 6 cuncurrent USART.  They can be enabled in any order and number as long as it is supported by the microcontroller. Each USART has its own circular buffer and code, so they work fully independent of each other.
+This UART library is loosely based on a *Technical Brief* [[TB3216](https://ww1.microchip.com/downloads/en/Appnotes/TB3216-Getting-Started-with-USART-DS90003216.pdf)] from **Microchip** 
+that I have tried to adhere to in function and naming conventions. The library supports up to 6 cuncurrent UART and they can be enabled in any order and number as long as it is supported by the microcontroller. Each UART has its own circular buffer and code, so they work fully independent of each other.
 
-The library size compiled is **~900 bytes** with one USART and without usage of the `fprintf` function. It is **~2700 bytes** with the library for `fprintf` linked in. The code is more or less self-explanatory. At  places I have tried to comment it sparingly.
+The size of the library, compiled, is **~900 bytes** with one UART and without usage of the `fprintf` function. It is **~2700 bytes** with the library for `fprintf` linked in. The code is more or less self-explanatory. At  places I have tried to comment it sparingly.
+
+**Note 1**: In the text I have used UART for the library implementation and USART for the actual device of the microcontroller.
+
+**Note 2**: The compilation step (separate compilation and linking) is done on a UNIX machine (**Apple Mac**) but should be easy to compile in **Microchip Studio** as well.
 
 ## Intended devices
 
@@ -20,7 +24,7 @@ This library was initially developed for a [bare metal atmega4808](https://githu
 
 > A development board was designed for low powered battery operation
 
-**P.S.** As a convenience for you to rapidly test and evaluate this library I have also [applied it ](https://github.com/fuxelius/atmega_avr_uart_nano_every) to the [Arduino Nano Every](https://docs.arduino.cc/hardware/nano-every) with an ATmega4809 MCU. The setup for how to compile is detailed in [C Programming for 'Arduino Nano Every' Board (ATmega4809) with a Mac and VS Code](https://github.com/fuxelius/nano_every_bare_metal#c-programming-for-arduino-nano-every-board-atmega4809-with-a-mac-and-vs-code)
+**P.S.** As a convenience for you to rapidly test and evaluate it I have also [applied the uart library ](https://github.com/fuxelius/atmega_avr_uart_nano_every) to the [Arduino Nano Every](https://docs.arduino.cc/hardware/nano-every) with an ATmega4809 microcontroller. The setup for how to compile is detailed in [C Programming for 'Arduino Nano Every' Board (ATmega4809) with a Mac and VS Code](https://github.com/fuxelius/nano_every_bare_metal#c-programming-for-arduino-nano-every-board-atmega4809-with-a-mac-and-vs-code)
 
 <img src="doc/pic/closeup.png"  width="400">
 
@@ -35,7 +39,7 @@ All setting for the library is done in `uart_settings.h` and `uart_settings.c`
 	
 > The default value is 32
 	
-`RBUFFER_SIZE` defines the size of the ringbuffers for Rx and Tx and even out the data flow through these units. It also mediates the interrupt driven design. The buffer size is symmetric and equal for both transmit (Tx) and receive (Rx). It has a typical size of 32 or 64, but can be set at any size in its range from 2, 4, 8, 16, 32, 64 or 128. 
+`RBUFFER_SIZE` defines the size of the ringbuffers for Rx and Tx and even out the data flow through these units over time. It also mediates the interrupt driven design. The buffer size is symmetric and equal for both transmit (Tx) and receive (Rx). It has a typical size of 32 or 64, but can be set to any size in its range from 2, 4, 8, 16, 32, 64 or 128. 
 
 ### Enabling USARTn
 
@@ -49,10 +53,12 @@ All setting for the library is done in `uart_settings.h` and `uart_settings.c`
 	
 > Enable USARTn by uncommenting it, here USART0 is enabled
 
-Depending on MCU, the library supports up to 6 concurrent USART units. They can be enabled in any order and number as long as it is supported by the MCU. Each USART has its own circular buffer and code, so they work fully independent of each other.
+Depending on microcontroller, the library supports up to 6 concurrent USART units. As previously mentioned, they can be enabled in any order and number as long as it is supported by the microcontroller. Each USART has its own circular buffer and code, so they work fully independent of each other.
 	
 
 ### Assign PORTMUX & Rx, Tx Pinout
+
+The Port Multiplexer (PORTMUX) can either enable or disable the functionality of the pins, or change between default and alternative pin positions. Available options are described in detail in the PORTMUX register map and depend on the actual pin and its properties. Select which ever is appropriate for your selection of USARTn and pin selection. [ATmega 4809 Datasheet ss. 139]
 
 	#ifdef USART0_ENABLE
 	void usart0_port_init(void) {
@@ -62,7 +68,7 @@ Depending on MCU, the library supports up to 6 concurrent USART units. They can 
 	}
 	#endif
 
-> Above the deafult pins are used, no need to change PORTMUX
+> Above the default pins are used, no need to change PORTMUX. Only to enable Rx for input and Tx for output.
 
 	#ifdef USART3_ENABLE
 	void usart3_port_init(void) {
@@ -73,8 +79,6 @@ Depending on MCU, the library supports up to 6 concurrent USART units. They can 
 	#endif
 
 > Above example is port multiplexing for pin PB04 and PB05 for USART3 as given in the USART library given for Arduino Nano Every. [ATmega 4809 Datasheet ss. 143]
-
-The Port Multiplexer (PORTMUX) can either enable or disable the functionality of the pins, or change between default and alternative pin positions. Available options are described in detail in the PORTMUX register map and depend on the actual pin and its properties. Select which ever is appropriate for your selection of USARTn and pin selection. [ATmega 4809 Datasheet ss. 139]
 
 
 ## UART functions

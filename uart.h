@@ -3,7 +3,7 @@
  *
  *          Project:  UART for megaAVR, tinyAVR & AVR DA
  *          Author:   Hans-Henrik Fuxelius   
- *          Date:     2023-05-08           
+ *          Date:     Uppsala, 2023-05-08          
  */
 
 #include <stdint.h>
