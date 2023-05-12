@@ -4,7 +4,7 @@ that I have tried to adhere to in function and naming conventions. The library s
 
 The size of the library, compiled, is **~900 bytes** with one UART and without usage of the `fprintf` function. It is **~2700 bytes** with the library for `fprintf` linked in. The code is more or less self-explanatory. At  places I have tried to comment it sparingly.
 
-**Note 1**: In the text I have used UART for the library implementation and USART for the actual device of the microcontroller.
+**Note 1**: In the text I have used [UART](https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter) for the library implementation and [USART](https://en.wikipedia.org/wiki/Universal_synchronous_and_asynchronous_receiver-transmitter) for the actual device of the microcontroller which is capable of both.
 
 **Note 2**: The compilation step (separate compilation and linking) is done on a UNIX machine (**Apple Mac**) but should be easy to compile in **Microchip Studio** as well.
 
