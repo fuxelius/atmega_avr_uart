@@ -32,7 +32,7 @@ int main(void) {
         // (4) - Use fprintf to write to stream
         fprintf(&USART0_stream, "Hello world!\r\n");
 
-        for(uint8_t i=0; i<5; i++) {
+        for(size_t i=0; i<5; i++) {
             // (5) - Use formatted fprintf to write to stream
             fprintf(&USART0_stream, "\r\nCounter value is: 0x%02X ", j++);
             _delay_ms(500);

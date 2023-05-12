@@ -1,4 +1,6 @@
 # Interrupt driven and buffered UART for tiny- and megaAVR
+**``By Hans-Henrik Fuxelius, 2023-05-12``
+
 This UART library is loosely based on a *Technical Brief* [[TB3216](https://ww1.microchip.com/downloads/en/Appnotes/TB3216-Getting-Started-with-USART-DS90003216.pdf)] from **Microchip** 
 that I have tried to adhere to in function and naming conventions. The library supports up to 6 cuncurrent UART and they can be enabled in any order and number as long as it is supported by the microcontroller. Each UART has its own circular buffer and code, so they work fully independent of each other.
 
@@ -113,7 +115,7 @@ Polling with read_char is used for reading input from an USART
 To be able to close a unit in a proper way is essential for proper operation. This makes it possible to initialize and close units as they are needed.
 
 ## How to use the library
-Here is a short overview of how to use the library. 
+Here is a short overview of how to use the library. The **order of calling** `init()`, `sei()` and `usart0_close()`, `cli()` is crucial for correct operation. A **correct session** looks like below!
 
     // (1) - Init USART
     usart0_init((uint16_t)BAUD_RATE(9600));
@@ -127,7 +129,7 @@ Here is a short overview of how to use the library.
     // (4) - Use fprintf to write to stream
     fprintf(&USART0_stream, "Hello world!\r\n");
 
-    for(uint8_t i=0; i<5; i++) {
+    for(size_t i=0; i<5; i++) {
         // (5) - Use formatted fprintf to write to stream
         fprintf(&USART0_stream, "\r\nCounter value is: 0x%02X ", j++);
         _delay_ms(500);
@@ -159,22 +161,33 @@ Here is a short overview of how to use the library.
     // (10) - Clear global interrupts
     cli();
 
+
 ### (1) - Init UART
+The library must be initialized **before** enabling global interrupts in step 2.
 
 ### (2) - Enable global interrupts
+Once global interrupts are enabled the library has started working, **not** before!
 
 ### (3) - Send string to UART
+`usart0_send_string(str, len)` is the plain function for printing to USART, it has no formatting but also has a smaller library footprint than using `fprintf()`
 
-### (4) - Use printf to write to UART
+### (4) - Use fprintf to write to UART
+The created filestream `&USART0_stream` lets you write directly with `fprintf(FILE *stream, const char          *format)`
 
-### (5) - Use formatted printf to write to UART
+### (5) - Use formatted fprintf to write to UART
+An example of *formatted printing* with `fprintf()`
 
 ### (6) - Get UART input by polling ringbuffer
+All USART input and output is mediated by ringbuffers, and input from the units is done by active **polling** of the input buffer with `usart0_read_char()`. What you types on keyboard are printed to UART!
 
 ### (7) - Send single character to UART
+`usart0_send_char()` is the plain function for sending a single character to USART.
 
 ### (8) - Check that everything is printed before closing UART
+This string is just a test to see that it is completely and correctly written to USART before the unit is closed.
 
 ### (9) - Close UART0
+Is is important to properly being able to open and close USART devices without loosing any information. Here it loops over and over again for testing!
 
 ### (10) - Clear global interrupts
+`cli()` **must** be called after `usart0_close()`
