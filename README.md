@@ -30,7 +30,7 @@ This library was initially developed for a [bare metal atmega4808](https://githu
 
 <img src="doc/pic/closeup.png"  width="400">
 
-> Standard Arduino Nano Every development board
+> The standard Arduino Nano Every development board
 
 ## Setting up parameters
 All setting for the library is done in `uart_settings.h` and `uart_settings.c` 
