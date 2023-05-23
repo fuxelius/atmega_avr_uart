@@ -24,9 +24,9 @@ This library was initially developed for a [bare metal atmega4808](https://githu
 
 <img src="doc/pic/DevBoard.png"  width="400">
 
-> A development board was designed for low powered battery operation
+> A development board designed for low power battery operation
 
-**P.S.** As a convenience for you to rapidly test and evaluate it I have also [applied the uart library ](https://github.com/fuxelius/atmega_avr_uart_nano_every) to the [Arduino Nano Every](https://docs.arduino.cc/hardware/nano-every) with an ATmega4809 microcontroller. The setup for how to compile is detailed in [C Programming for 'Arduino Nano Every' Board (ATmega4809) with a Mac and VS Code](https://github.com/fuxelius/nano_every_bare_metal#c-programming-for-arduino-nano-every-board-atmega4809-with-a-mac-and-vs-code)
+**P.S.** As a convenience for rapid test and evaluation, I have also [applied the uart library ](https://github.com/fuxelius/atmega_avr_uart_nano_every) to the [Arduino Nano Every](https://docs.arduino.cc/hardware/nano-every) with an ATmega4809 microcontroller. The setup for how to compile is detailed in [C Programming for 'Arduino Nano Every' Board (ATmega4809) with a Mac and VS Code](https://github.com/fuxelius/nano_every_bare_metal#c-programming-for-arduino-nano-every-board-atmega4809-with-a-mac-and-vs-code)
 
 <img src="doc/pic/closeup.png"  width="400">
 
@@ -85,22 +85,23 @@ The Port Multiplexer (PORTMUX) can either enable or disable the functionality of
 
 ## UART functions
 
-The number of functions is comprehensive and is easy to use.
+The number of functions is comprehensive and easy to use.
 
 	extern FILE USARTn_stream;
+	
 	void usartN_init(uint16_t baud_rate);
 	void usartN_send_char(char c);
 	void usartN_send_string(char* str, uint8_t len);
 	uint16_t usartN_read_char(void);
 	void usartN_close(void);
 
-> N and n above denotes a USART in use (0 to 5)
+> N and n above denotes the USART in use (0 to 5)
 
 ### File Stream
 The file stream `FILE USARTn_stream;` is used for printing formatted strings with `fprintf` to each USART in use
 
 ### init
-Each unit most be initialized before it can operate correctly.
+Each unit must be initialized before it can operate correctly.
 
 ### send_char
 Sends a single character to an USART
@@ -166,7 +167,7 @@ Here is a short overview of how to use the library. The **order of calling** `in
 The library must be initialized **before** enabling global interrupts in step 2.
 
 ### (2) - Enable global interrupts
-Once global interrupts are enabled the library has started working, **not** before!
+Once global interrupts are enabled the library starts to work, **not** before!
 
 ### (3) - Send string to UART
 `usart0_send_string(str, len)` is the plain function for printing to USART, it has no formatting but also has a smaller library footprint than using `fprintf()`
@@ -178,13 +179,13 @@ The created filestream `&USART0_stream` lets you write directly with `fprintf(FI
 An example of *formatted printing* with `fprintf()`
 
 ### (6) - Get UART input by polling ringbuffer
-All USART input and output is mediated by ringbuffers, and input from the units is done by active **polling** of the input buffer with `usart0_read_char()`. What you types on keyboard are printed to UART!
+All USART input and output is mediated by ringbuffers, and input from the units is done by active **polling** of the input buffer with `usart0_read_char()`. What you type on keyboard are printed to USART0!
 
 ### (7) - Send single character to UART
 `usart0_send_char()` is the plain function for sending a single character to USART.
 
 ### (8) - Check that everything is printed before closing UART
-This string is just a test to see that it is completely and correctly written to USART before the unit is closed.
+This string is just a test to see that it is completely and correctly written to USART before unit is closed.
 
 ### (9) - Close UART0
 Is is important to properly being able to open and close USART devices without loosing any information. Here it loops over and over again for testing!
