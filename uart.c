@@ -97,17 +97,17 @@ uint16_t usart0_read_char(volatile usart_meta* meta) {
 }
 
 // Disable unit Tx and Rx before its interrupts!
-void usart0_close(void) {
-	while(!rbuffer_empty(&usart0_meta.rb_tx)); 		// Wait for Tx to finish all character in ring buffer
-	while(!(USART0.STATUS & USART_DREIF_bm)); 		// Wait for Tx unit to finish the last character of ringbuffer
+void usart0_close(volatile usart_meta* meta) {
+	while(!rbuffer_empty(&meta->rb_tx)); 				// Wait for Tx to finish all character in ring buffer
+	while(!(meta->usart->STATUS & USART_DREIF_bm)); 	// Wait for Tx unit to finish the last character of ringbuffer
 
-	_delay_ms(200); 								// Extra safety for Tx to finish!
+	_delay_ms(200); 									// Extra safety for Tx to finish!
 
-	USART0.CTRLB &= ~USART_RXEN_bm; 				// Disable Rx unit
-	USART0.CTRLB &= ~USART_TXEN_bm; 				// Disable Rx unit
+	meta->usart->CTRLB &= ~USART_RXEN_bm; 				// Disable Rx unit
+	meta->usart->CTRLB &= ~USART_TXEN_bm; 				// Disable Rx unit
 
-	USART0.CTRLA &= ~USART_RXCIE_bm;				// Disable Rx interrupt
-	USART0.CTRLA &= ~USART_DREIE_bm;				// Disable Tx interrupt
+	meta->usart->CTRLA &= ~USART_RXCIE_bm;				// Disable Rx interrupt
+	meta->usart->CTRLA &= ~USART_DREIE_bm;				// Disable Tx interrupt
 }
 
 #endif
@@ -124,7 +124,8 @@ void isr_usart_rxc_vect(volatile usart_meta* meta) {
 
 void isr_usart_dre_vect(volatile usart_meta* meta) {
 	if(!rbuffer_empty(&meta->rb_tx)) {
-		meta->usart->TXDATAL = rbuffer_remove(&usart0_meta.rb_tx);
+		meta->usart->TXDATAL = rbuffer_remove(&usart0_meta.rb_tx);	// <--------- Hmmm this works, why???
+		// meta->usart->TXDATAL = rbuffer_remove(&meta->rb_tx);     // <--------- Hmmm it crashes it, why???
 	}
 	else {
 		meta->usart->CTRLA &= ~USART_DREIE_bm;

@@ -61,7 +61,7 @@ int main(void) {
         fprintf(&USART0_stream, "\r\n\r\n<-<->->");
 
         // (9) - Close USART0
-        usart0_close();    
+        usart0_close(&usart0_meta);    
 
         // (10) - Clear global interrupts
         cli();
