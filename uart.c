@@ -132,21 +132,21 @@ void isr_usart_rxc_vect(volatile usart_meta* meta) {
 	meta->usart_error = meta->usart->RXDATAH;
 }
 
+void isr_usart_dre_vect(volatile usart_meta* meta) {
+	if(!rbuffer_empty(&meta->rb_tx)) {
+		meta->usart->TXDATAL = rbuffer_remove(&usart0_meta.rb_tx);
+	}
+	else {
+		meta->usart->CTRLA &= ~USART_DREIE_bm;
+	}
+}
+
 #ifdef USART0_ENABLE
 ISR(USART0_RXC_vect) {
-    // char data = USART0.RXDATAL;
-	// rbuffer_insert(data, &usart0_meta.rb_rx);
-	// usart0_meta.usart_error = USART0.RXDATAH;
-
 	isr_usart_rxc_vect(&usart0_meta);
 }
 
 ISR(USART0_DRE_vect) {
-	if(!rbuffer_empty(&usart0_meta.rb_tx)) {
-		USART0.TXDATAL = rbuffer_remove(&usart0_meta.rb_tx);
-	}
-	else {
-		USART0.CTRLA &= ~USART_DREIE_bm;
-	}
+	isr_usart_dre_vect(&usart0_meta);
 }
 #endif
