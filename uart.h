@@ -61,6 +61,7 @@ void usart0_port_init(volatile usart_meta* meta);
 // USART FUNCTIONS
 #ifdef USART0_ENABLE
 extern FILE usart0_stream;
+extern volatile usart_meta usart0_meta;
 void usart0_init(volatile usart_meta* meta, uint16_t baud_rate);
 void usart0_send_char(volatile usart_meta* meta, char c);
 void usart0_send_string(volatile usart_meta* meta, char* str, uint8_t len);

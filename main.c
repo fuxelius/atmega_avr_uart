@@ -10,12 +10,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <stdio.h>
-
 #include "uart.h"
-
-#ifdef USART0_ENABLE
-extern volatile usart_meta usart0_meta;
-#endif
 
 int main(void) {
 
