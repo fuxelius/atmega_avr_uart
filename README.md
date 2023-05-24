@@ -4,7 +4,7 @@
 This UART library is loosely based on a *Technical Brief* [[TB3216](https://ww1.microchip.com/downloads/en/Appnotes/TB3216-Getting-Started-with-USART-DS90003216.pdf)] from **Microchip** 
 that I have tried to adhere to in function and naming conventions. The library supports up to 6 cuncurrent UART and they can be enabled in any order and number as long as it is supported by the microcontroller. Each UART has its own circular buffer and code, so they work fully independent of each other.
 
-The size of the library, compiled, is **~900 bytes** with one UART and without usage of the `fprintf` function. It is **~2700 bytes** with the library for `fprintf` linked in. The code is more or less self-explanatory. At  places I have tried to comment it sparingly.
+The size of the **main.c** project compiled, is **~900 bytes** with one UART and without usage of the `fprintf` function. It is **~2700 bytes** with the library for `fprintf` linked in. The code is more or less self-explanatory. At  places I have tried to comment it sparingly.
 
 **Note 1**: In the text I have used [UART](https://en.wikipedia.org/wiki/Universal_asynchronous_receiver-transmitter) for the library implementation and [USART](https://en.wikipedia.org/wiki/Universal_synchronous_and_asynchronous_receiver-transmitter) for the actual device of the microcontroller which is capable of both.
 
