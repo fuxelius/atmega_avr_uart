@@ -17,7 +17,7 @@ int main(void) {
     uint16_t c;
     uint8_t j=0;
 
-    //  usart_set(&usart0): init port, portmux, pin 1&2 here!!!!!   <-----implementera
+    //  usart0_set(&usart0): init port, portmux, pin 1&2 here!!!!!   <----- update the struct
 
     while (1) {
 
