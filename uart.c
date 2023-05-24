@@ -103,7 +103,7 @@ void usart0_close(volatile usart_meta* meta) {
 }
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-// SPECIAL
+// SPECIAL STREAM SETUP
 #ifdef USART0_ENABLE
 int usart0_print_char(char c, FILE *stream) { 
     usart0_send_char(&usart0_meta, c);							
@@ -123,8 +123,7 @@ void isr_usart_rxc_vect(volatile usart_meta* meta) {
 
 void isr_usart_dre_vect(volatile usart_meta* meta) {
 	if(!rbuffer_empty(&meta->rb_tx)) {
-		// meta->usart->TXDATAL = rbuffer_remove(&usart0_meta.rb_tx);	// <--------- Hmmm this works, why???
-		meta->usart->TXDATAL = rbuffer_remove(&meta->rb_tx);     // <--------- Hmmm it crashes it, why???
+		meta->usart->TXDATAL = rbuffer_remove(&meta->rb_tx);     
 	}
 	else {
 		meta->usart->CTRLA &= ~USART_DREIE_bm;
