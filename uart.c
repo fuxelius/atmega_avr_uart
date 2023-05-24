@@ -87,15 +87,6 @@ void usart0_send_string(char* str, uint8_t len) {
 	}
 }
 
-// uint16_t usart0_read_char(void) {
-// 	if (!rbuffer_empty(&usart0_meta.rb_rx)) {
-// 		return (((usart0_meta.usart_error & USART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&usart0_meta.rb_rx));
-// 	}
-// 	else {
-// 		return (((usart0_meta.usart_error & USART_RX_ERROR_MASK) << 8) | USART_NO_DATA);		// Empty ringbuffer
-// 	}
-// }
-
 uint16_t usart0_read_char(volatile usart_meta* meta) {
 	if (!rbuffer_empty(&meta->rb_rx)) {
 		return (((meta->usart_error & USART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&meta->rb_rx));
@@ -124,8 +115,7 @@ void usart0_close(void) {
 
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-// USART0 ISR FUNCTIONS
-
+// ISR HELPER FUNCTIONS
 void isr_usart_rxc_vect(volatile usart_meta* meta) {
     char data = meta->usart->RXDATAL;
 	rbuffer_insert(data, &meta->rb_rx);
@@ -141,6 +131,8 @@ void isr_usart_dre_vect(volatile usart_meta* meta) {
 	}
 }
 
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+// ISR FUNCTIONS
 #ifdef USART0_ENABLE
 ISR(USART0_RXC_vect) {
 	isr_usart_rxc_vect(&usart0_meta);
