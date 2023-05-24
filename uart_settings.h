@@ -26,22 +26,3 @@
 void usart0_port_init(void);
 #endif
 
-#ifdef USART1_ENABLE
-void usart1_port_init(void);
-#endif
-
-#ifdef USART2_ENABLE
-void usart2_port_init(void);
-#endif
-
-#ifdef USART3_ENABLE
-void usart3_port_init(void);
-#endif
-
-#ifdef USART4_ENABLE
-void usart4_port_init(void);
-#endif
-
-#ifdef USART5_ENABLE
-void usart5_port_init(void);
-#endif
