@@ -64,14 +64,6 @@ void usart0_send_char(volatile usart_meta* meta, char c) {
 	meta->usart->CTRLA |= USART_DREIE_bm;			// Enable Tx interrupt 
 }
 
-// SPECIAL
-int usart0_print_char(char c, FILE *stream) { 
-    usart0_send_char(&usart0_meta, c);							
-    return 0; 
-}
-
-// SPECIAL
-FILE USART0_stream = FDEV_SETUP_STREAM(usart0_print_char, NULL, _FDEV_SETUP_WRITE);
 
 void usart0_init(volatile usart_meta* meta, uint16_t baud_rate) {
 	rbuffer_init(&meta->rb_rx);								// Init Rx buffer
@@ -97,7 +89,6 @@ uint16_t usart0_read_char(volatile usart_meta* meta) {
 	}
 }
 
-// Disable unit Tx and Rx before its interrupts!
 void usart0_close(volatile usart_meta* meta) {
 	while(!rbuffer_empty(&meta->rb_tx)); 				// Wait for Tx to finish all character in ring buffer
 	while(!(meta->usart->STATUS & USART_DREIF_bm)); 	// Wait for Tx unit to finish the last character of ringbuffer
@@ -111,6 +102,14 @@ void usart0_close(volatile usart_meta* meta) {
 	meta->usart->CTRLA &= ~USART_DREIE_bm;				// Disable Tx interrupt
 }
 
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+// SPECIAL
+int usart0_print_char(char c, FILE *stream) { 
+    usart0_send_char(&usart0_meta, c);							
+    return 0; 
+}
+
+FILE USART0_stream = FDEV_SETUP_STREAM(usart0_print_char, NULL, _FDEV_SETUP_WRITE);
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // ISR HELPER FUNCTIONS
@@ -122,8 +121,8 @@ void isr_usart_rxc_vect(volatile usart_meta* meta) {
 
 void isr_usart_dre_vect(volatile usart_meta* meta) {
 	if(!rbuffer_empty(&meta->rb_tx)) {
-		meta->usart->TXDATAL = rbuffer_remove(&usart0_meta.rb_tx);	// <--------- Hmmm this works, why???
-		// meta->usart->TXDATAL = rbuffer_remove(&meta->rb_tx);     // <--------- Hmmm it crashes it, why???
+		// meta->usart->TXDATAL = rbuffer_remove(&usart0_meta.rb_tx);	// <--------- Hmmm this works, why???
+		meta->usart->TXDATAL = rbuffer_remove(&meta->rb_tx);     // <--------- Hmmm it crashes it, why???
 	}
 	else {
 		meta->usart->CTRLA &= ~USART_DREIE_bm;
