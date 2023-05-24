@@ -76,9 +76,9 @@ typedef struct {
 
 
 #ifdef USART0_ENABLE
-volatile ringbuffer rb_rx0;		// Receive 
-volatile ringbuffer rb_tx0;		// Transmit
-volatile uint8_t usart0_error;	// Holds error from RXDATAH
+// volatile ringbuffer rb_rx0;		// Receive 
+// volatile ringbuffer rb_tx0;		// Transmit
+// volatile uint8_t usart0_error;	// Holds error from RXDATAH
 
 volatile usart_meta usart0_meta;
 #endif
@@ -86,12 +86,6 @@ volatile usart_meta usart0_meta;
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // USART0 FUNCTIONS
 #ifdef USART0_ENABLE
-
-// void usart0_send_char(char c) {
-// 	while(rbuffer_full(&rb_tx0));
-// 	rbuffer_insert(c, &rb_tx0);
-// 	USART0.CTRLA |= USART_DREIE_bm;					// Enable Tx interrupt 
-// }
 
 void usart0_send_char(char c) {
 	while(rbuffer_full(&usart0_meta.rb_tx));
@@ -123,10 +117,10 @@ void usart0_send_string(char* str, uint8_t len) {
 
 uint16_t usart0_read_char(void) {
 	if (!rbuffer_empty(&usart0_meta.rb_rx)) {
-		return (((usart0_error & USART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&rb_rx0));
+		return (((usart0_meta.usart_error & USART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&usart0_meta.rb_rx));
 	}
 	else {
-		return (((usart0_error & USART_RX_ERROR_MASK) << 8) | USART_NO_DATA);		// Empty ringbuffer
+		return (((usart0_meta.usart_error & USART_RX_ERROR_MASK) << 8) | USART_NO_DATA);		// Empty ringbuffer
 	}
 }
 
@@ -154,7 +148,7 @@ void usart0_close(void) {
 ISR(USART0_RXC_vect) {
     char data = USART0.RXDATAL;
 	rbuffer_insert(data, &usart0_meta.rb_rx);
-	usart0_error = USART0.RXDATAH;
+	usart0_meta.usart_error = USART0.RXDATAH;
 }
 
 ISR(USART0_DRE_vect) {
