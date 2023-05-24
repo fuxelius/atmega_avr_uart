@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <util/delay.h>
-#include "uart_settings.h"
 #include "uart.h"
 
 #define USART_RX_ERROR_MASK (USART_BUFOVF_bm | USART_FERR_bm | USART_PERR_bm) // [Datasheet ss. 295]
@@ -58,17 +57,22 @@ volatile usart_meta usart0_meta = {.usart = &USART0};
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // USART FUNCTIONS
 
+void usart0_port_init(volatile usart_meta* meta) {
+    asm("NOP");                         // PORTMUX
+    PORTA.DIR &= ~PIN1_bm;			    // Rx
+    PORTA.DIR |= PIN0_bm;			    // Tx
+}
+
 void usart0_send_char(volatile usart_meta* meta, char c) {
 	while(rbuffer_full(&meta->rb_tx));
 	rbuffer_insert(c, &meta->rb_tx);
 	meta->usart->CTRLA |= USART_DREIE_bm;			// Enable Tx interrupt 
 }
 
-
 void usart0_init(volatile usart_meta* meta, uint16_t baud_rate) {
 	rbuffer_init(&meta->rb_rx);								// Init Rx buffer
 	rbuffer_init(&meta->rb_tx);								// Init Tx buffer
-	usart0_port_init();										// Defined in uart_settings.h
+	usart0_port_init(meta);									// Defined in uart_settings.h     <----------------------------- UUGH!
     meta->usart->BAUD = baud_rate; 							// Set BAUD rate
 	meta->usart->CTRLB |= USART_RXEN_bm | USART_TXEN_bm; 	// Enable Rx & Enable Tx 
 	meta->usart->CTRLA |= USART_RXCIE_bm; 					// Enable Rx interrupt 

@@ -6,14 +6,29 @@
  *          Date:     Uppsala, 2023-05-08          
  */
 
+#include <stdio.h>
 #include <stdint.h>
-#include "uart_settings.h"
 
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+// DEFINE RING BUFFER SIZE; MUST BE 2, 4, 8, 16, 32, 64 or 128  
+#define RBUFFER_SIZE 32  
+
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+// ENABLE USART UNITS (UNCOMMENT USARTn TO ENABLE)
+#define USART0_ENABLE
+// #define USART1_ENABLE
+// #define USART2_ENABLE
+// #define USART3_ENABLE
+// #define USART4_ENABLE
+// #define USART5_ENABLE
+
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 #define USART_BUFFER_OVERFLOW    0x6400      // ==USART_BUFOVF_bm  
 #define USART_FRAME_ERROR        0x0400      // ==USART_FERR_bm             
 #define USART_PARITY_ERROR       0x0200      // ==USART_PERR_bm      
 #define USART_NO_DATA            0x0100      
 
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 #define BAUD_RATE(BAUD_RATE) ((float)(F_CPU * 64 / (16 * (float)BAUD_RATE)) + 0.5)
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
@@ -28,13 +43,19 @@ typedef struct {
 // USART META STRUCT
 typedef struct { 
 	USART_t* usart;					// USART device ptr
-    FILE uart_stream;				// File stream
+    // FILE uart_stream;				// File stream
     // PORT
     // PIN1 & 2
 	volatile ringbuffer rb_rx;		// Receive 
 	volatile ringbuffer rb_tx;		// Transmit
 	volatile uint8_t usart_error;	// Holds error from RXDATAH        
 } usart_meta;
+
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+// PORTMUX & PINOUT (DO NOT TOUCH THESE)
+#ifdef USART0_ENABLE
+void usart0_port_init(volatile usart_meta* meta);
+#endif
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // USART FUNCTIONS
