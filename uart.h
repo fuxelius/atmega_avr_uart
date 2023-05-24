@@ -17,10 +17,29 @@
 #define BAUD_RATE(BAUD_RATE) ((float)(F_CPU * 64 / (16 * (float)BAUD_RATE)) + 0.5)
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
+// RINGBUFFER STRUCT
+typedef struct { 
+    volatile char     buffer[RBUFFER_SIZE];     
+    volatile uint8_t  in;                           
+    volatile uint8_t  out;                          
+    volatile uint8_t  count;         
+} ringbuffer;
+
+// USART META STRUCT
+typedef struct { 
+	USART_t* usart;					// USART device ptr
+	FILE uart_stream;				// File stream
+	volatile ringbuffer rb_rx;		// Receive 
+	volatile ringbuffer rb_tx;		// Transmit
+	volatile uint8_t usart_error;	// Holds error from RXDATAH        
+} usart_meta;
+
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // USART FUNCTIONS
 #ifdef USART0_ENABLE
 extern FILE USART0_stream;
-void usart0_init(uint16_t baud_rate);
+void usart0_init(uint16_t baud_rate, volatile usart_meta* meta);
+// void usart0_init(uint16_t baud_rate);
 void usart0_send_char(char c);
 void usart0_send_string(char* str, uint8_t len);
 uint16_t usart0_read_char(void);

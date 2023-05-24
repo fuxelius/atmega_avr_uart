@@ -13,6 +13,8 @@
 
 #include "uart.h"
 
+extern volatile usart_meta usart0_meta;
+
 int main(void) {
 
     uint16_t c;
@@ -21,7 +23,7 @@ int main(void) {
     while (1) {
 
         // (1) - Init USART
-        usart0_init((uint16_t)BAUD_RATE(9600));
+        usart0_init((uint16_t)BAUD_RATE(9600), &usart0_meta);
 
         // (2) - Enable global interrupts
         sei(); 
