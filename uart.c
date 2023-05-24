@@ -51,7 +51,7 @@ char rbuffer_remove(volatile ringbuffer* rb) {
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // VARIABLES
 #ifdef USART0_ENABLE
-volatile usart_meta usart0_meta = {.usart = &USART0};
+volatile usart_meta usart0 = {.usart = &USART0};
 #endif
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
@@ -70,6 +70,7 @@ void usart0_send_char(volatile usart_meta* meta, char c) {
 }
 
 void usart0_init(volatile usart_meta* meta, uint16_t baud_rate) {
+	// meta->stream = usart0_stream;
 	rbuffer_init(&meta->rb_rx);								// Init Rx buffer
 	rbuffer_init(&meta->rb_tx);								// Init Tx buffer
 	usart0_port_init(meta);									// Defined in uart_settings.h     <----------------------------- UUGH!
@@ -110,7 +111,7 @@ void usart0_close(volatile usart_meta* meta) {
 // SPECIAL STREAM SETUP
 #ifdef USART0_ENABLE
 int usart0_print_char(char c, FILE *stream) { 
-    usart0_send_char(&usart0_meta, c);							
+    usart0_send_char(&usart0, c);							
     return 0; 
 }
 
@@ -138,10 +139,10 @@ void isr_usart_dre_vect(volatile usart_meta* meta) {
 // ISR FUNCTIONS
 #ifdef USART0_ENABLE
 ISR(USART0_RXC_vect) {
-	isr_usart_rxc_vect(&usart0_meta);
+	isr_usart_rxc_vect(&usart0);
 }
 
 ISR(USART0_DRE_vect) {
-	isr_usart_dre_vect(&usart0_meta);
+	isr_usart_dre_vect(&usart0);
 }
 #endif
