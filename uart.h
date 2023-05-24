@@ -41,9 +41,8 @@ typedef struct {
 #ifdef USART0_ENABLE
 extern FILE USART0_stream;
 void usart0_init( volatile usart_meta* meta, uint16_t baud_rate);
-// void usart0_send_char(char c);
 void usart0_send_char(volatile usart_meta* meta, char c);
-void usart0_send_string(char* str, uint8_t len);
+void usart0_send_string(volatile usart_meta* meta, char* str, uint8_t len);
 uint16_t usart0_read_char(volatile usart_meta* meta);
 void usart0_close(volatile usart_meta* meta);
 #endif

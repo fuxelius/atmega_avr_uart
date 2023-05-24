@@ -64,11 +64,13 @@ void usart0_send_char(volatile usart_meta* meta, char c) {
 	meta->usart->CTRLA |= USART_DREIE_bm;			// Enable Tx interrupt 
 }
 
+// SPECIAL
 int usart0_print_char(char c, FILE *stream) { 
     usart0_send_char(&usart0_meta, c);							
     return 0; 
 }
 
+// SPECIAL
 FILE USART0_stream = FDEV_SETUP_STREAM(usart0_print_char, NULL, _FDEV_SETUP_WRITE);
 
 void usart0_init(volatile usart_meta* meta, uint16_t baud_rate) {
@@ -80,9 +82,9 @@ void usart0_init(volatile usart_meta* meta, uint16_t baud_rate) {
 	meta->usart->CTRLA |= USART_RXCIE_bm; 					// Enable Rx interrupt 
 }
 
-void usart0_send_string(char* str, uint8_t len) {
+void usart0_send_string(volatile usart_meta* meta, char* str, uint8_t len) {
 	for (size_t i=0; i<len; i++) {
-		usart0_send_char(&usart0_meta, str[i]);
+		usart0_send_char(meta, str[i]);
 	}
 }
 

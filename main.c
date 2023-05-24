@@ -29,7 +29,7 @@ int main(void) {
         sei(); 
 
         // (3) - Send string to USART
-        usart0_send_string("\r\n\r\nPEACE BRO!\r\n\r\n", 18);
+        usart0_send_string(&usart0_meta, "\r\n\r\nPEACE BRO!\r\n\r\n", 18);
 
         // (4) - Use fprintf to write to stream
         fprintf(&USART0_stream, "Hello world!\r\n");
