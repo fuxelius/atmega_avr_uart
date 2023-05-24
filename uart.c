@@ -104,12 +104,14 @@ void usart0_close(volatile usart_meta* meta) {
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // SPECIAL
+#ifdef USART0_ENABLE
 int usart0_print_char(char c, FILE *stream) { 
     usart0_send_char(&usart0_meta, c);							
     return 0; 
 }
 
 FILE USART0_stream = FDEV_SETUP_STREAM(usart0_print_char, NULL, _FDEV_SETUP_WRITE);
+#endif
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // ISR HELPER FUNCTIONS
