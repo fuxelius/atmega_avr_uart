@@ -10,6 +10,7 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 #include <stdio.h>
+
 #include "uart.h"
 
 #ifdef USART0_ENABLE
@@ -33,24 +34,24 @@ int main(void) {
         usart0_send_string(&usart0_meta, "\r\n\r\nPEACE BRO!\r\n\r\n", 18);
 
         // (4) - Use fprintf to write to stream
-        fprintf(&USART0_stream, "Hello world!\r\n");
+        fprintf(&usart0_stream, "Hello world!\r\n");
 
         for(size_t i=0; i<5; i++) {
             // (5) - Use formatted fprintf to write to stream
-            fprintf(&USART0_stream, "\r\nCounter value is: 0x%02X ", j++);
+            fprintf(&usart0_stream, "\r\nCounter value is: 0x%02X ", j++);
             _delay_ms(500);
 
             // (6) - Get USART input by polling ringbuffer
             while(!((c = usart0_read_char(&usart0_meta)) & USART_NO_DATA)) {
 
                 if (c & USART_PARITY_ERROR) {
-                    fprintf(&USART0_stream, "USART PARITY ERROR: ");
+                    fprintf(&usart0_stream, "USART PARITY ERROR: ");
                 }
                 if (c & USART_FRAME_ERROR) {
-                    fprintf(&USART0_stream, "USART FRAME ERROR: ");
+                    fprintf(&usart0_stream, "USART FRAME ERROR: ");
                 }
                 if (c & USART_BUFFER_OVERFLOW) {
-                    fprintf(&USART0_stream, "USART BUFFER OVERFLOW ERROR: ");
+                    fprintf(&usart0_stream, "USART BUFFER OVERFLOW ERROR: ");
                 }
 
                 // (7) - Send single character to USART
@@ -59,7 +60,7 @@ int main(void) {
         }
 
         // (8) - Check that everything is printed before closing USART
-        fprintf(&USART0_stream, "\r\n\r\n<-<->->");
+        fprintf(&usart0_stream, "\r\n\r\n<-<->->");
 
         // (9) - Close USART0
         usart0_close(&usart0_meta);    
