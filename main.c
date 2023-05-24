@@ -53,7 +53,7 @@ int main(void) {
                 }
 
                 // (7) - Send single character to USART
-                usart0_send_char((char)c);
+                usart0_send_char(&usart0_meta, (char)c);
             }
         }
 

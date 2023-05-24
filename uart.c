@@ -56,17 +56,16 @@ volatile usart_meta usart0_meta = {.usart = &USART0};
 #endif
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-// USART0 FUNCTIONS
-#ifdef USART0_ENABLE
+// USART FUNCTIONS
 
-void usart0_send_char(char c) {
-	while(rbuffer_full(&usart0_meta.rb_tx));
-	rbuffer_insert(c, &usart0_meta.rb_tx);
-	USART0.CTRLA |= USART_DREIE_bm;					// Enable Tx interrupt 
+void usart0_send_char(volatile usart_meta* meta, char c) {
+	while(rbuffer_full(&meta->rb_tx));
+	rbuffer_insert(c, &meta->rb_tx);
+	meta->usart->CTRLA |= USART_DREIE_bm;			// Enable Tx interrupt 
 }
 
 int usart0_print_char(char c, FILE *stream) { 
-    usart0_send_char(c);							
+    usart0_send_char(&usart0_meta, c);							
     return 0; 
 }
 
@@ -83,7 +82,7 @@ void usart0_init(volatile usart_meta* meta, uint16_t baud_rate) {
 
 void usart0_send_string(char* str, uint8_t len) {
 	for (size_t i=0; i<len; i++) {
-		usart0_send_char(str[i]);
+		usart0_send_char(&usart0_meta, str[i]);
 	}
 }
 
@@ -109,9 +108,6 @@ void usart0_close(volatile usart_meta* meta) {
 	meta->usart->CTRLA &= ~USART_RXCIE_bm;				// Disable Rx interrupt
 	meta->usart->CTRLA &= ~USART_DREIE_bm;				// Disable Tx interrupt
 }
-
-#endif
-
 
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
