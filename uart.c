@@ -125,11 +125,20 @@ void usart0_close(void) {
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // USART0 ISR FUNCTIONS
+
+void isr_usart_rxc_vect(volatile usart_meta* meta) {
+    char data = meta->usart->RXDATAL;
+	rbuffer_insert(data, &meta->rb_rx);
+	meta->usart_error = meta->usart->RXDATAH;
+}
+
 #ifdef USART0_ENABLE
 ISR(USART0_RXC_vect) {
-    char data = USART0.RXDATAL;
-	rbuffer_insert(data, &usart0_meta.rb_rx);
-	usart0_meta.usart_error = USART0.RXDATAH;
+    // char data = USART0.RXDATAL;
+	// rbuffer_insert(data, &usart0_meta.rb_rx);
+	// usart0_meta.usart_error = USART0.RXDATAH;
+
+	isr_usart_rxc_vect(&usart0_meta);
 }
 
 ISR(USART0_DRE_vect) {
