@@ -23,7 +23,7 @@ int main(void) {
     while (1) {
 
         // (1) - Init USART
-        usart0_init((uint16_t)BAUD_RATE(9600), &usart0_meta);
+        usart0_init(&usart0_meta, (uint16_t)BAUD_RATE(9600));
 
         // (2) - Enable global interrupts
         sei(); 
@@ -40,7 +40,7 @@ int main(void) {
             _delay_ms(500);
 
             // (6) - Get USART input by polling ringbuffer
-            while(!((c = usart0_read_char()) & USART_NO_DATA)) {
+            while(!((c = usart0_read_char(&usart0_meta)) & USART_NO_DATA)) {
 
                 if (c & USART_PARITY_ERROR) {
                     fprintf(&USART0_stream, "USART PARITY ERROR: ");

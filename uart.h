@@ -28,7 +28,9 @@ typedef struct {
 // USART META STRUCT
 typedef struct { 
 	USART_t* usart;					// USART device ptr
-	FILE uart_stream;				// File stream
+    FILE uart_stream;				// File stream
+    // PORT
+    // PIN1 & 2
 	volatile ringbuffer rb_rx;		// Receive 
 	volatile ringbuffer rb_tx;		// Transmit
 	volatile uint8_t usart_error;	// Holds error from RXDATAH        
@@ -38,10 +40,10 @@ typedef struct {
 // USART FUNCTIONS
 #ifdef USART0_ENABLE
 extern FILE USART0_stream;
-void usart0_init(uint16_t baud_rate, volatile usart_meta* meta);
-// void usart0_init(uint16_t baud_rate);
+void usart0_init( volatile usart_meta* meta, uint16_t baud_rate);
 void usart0_send_char(char c);
 void usart0_send_string(char* str, uint8_t len);
-uint16_t usart0_read_char(void);
+// uint16_t usart0_read_char(void);
+uint16_t usart0_read_char(volatile usart_meta* meta);
 void usart0_close(void);
 #endif

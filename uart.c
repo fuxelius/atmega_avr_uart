@@ -72,22 +72,13 @@ int usart0_print_char(char c, FILE *stream) {
 
 FILE USART0_stream = FDEV_SETUP_STREAM(usart0_print_char, NULL, _FDEV_SETUP_WRITE);
 
-// void usart0_init(uint16_t baud_rate, volatile usart_meta* uart) {
-// 	rbuffer_init(&uart->rb_rx);							// Init RX0 buffer
-// 	rbuffer_init(&uart->rb_tx);							// Init TX0 buffer
-// 	usart0_port_init();								// Defined in uart_settings.h
-//     USART0.BAUD = baud_rate; 						// Set BAUD rate
-// 	USART0.CTRLB |= USART_RXEN_bm | USART_TXEN_bm; 	// Enable Rx & Enable Tx 
-// 	USART0.CTRLA |= USART_RXCIE_bm ; 				// Enable Rx interrupt 
-// }
-
-void usart0_init(uint16_t baud_rate, volatile usart_meta* meta) {
-	rbuffer_init(&meta->rb_rx);								// Init RX0 buffer
-	rbuffer_init(&meta->rb_tx);								// Init TX0 buffer
+void usart0_init(volatile usart_meta* meta, uint16_t baud_rate) {
+	rbuffer_init(&meta->rb_rx);								// Init Rx buffer
+	rbuffer_init(&meta->rb_tx);								// Init Tx buffer
 	usart0_port_init();										// Defined in uart_settings.h
     meta->usart->BAUD = baud_rate; 							// Set BAUD rate
 	meta->usart->CTRLB |= USART_RXEN_bm | USART_TXEN_bm; 	// Enable Rx & Enable Tx 
-	meta->usart->CTRLA |= USART_RXCIE_bm ; 					// Enable Rx interrupt 
+	meta->usart->CTRLA |= USART_RXCIE_bm; 					// Enable Rx interrupt 
 }
 
 void usart0_send_string(char* str, uint8_t len) {
@@ -96,12 +87,21 @@ void usart0_send_string(char* str, uint8_t len) {
 	}
 }
 
-uint16_t usart0_read_char(void) {
-	if (!rbuffer_empty(&usart0_meta.rb_rx)) {
-		return (((usart0_meta.usart_error & USART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&usart0_meta.rb_rx));
+// uint16_t usart0_read_char(void) {
+// 	if (!rbuffer_empty(&usart0_meta.rb_rx)) {
+// 		return (((usart0_meta.usart_error & USART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&usart0_meta.rb_rx));
+// 	}
+// 	else {
+// 		return (((usart0_meta.usart_error & USART_RX_ERROR_MASK) << 8) | USART_NO_DATA);		// Empty ringbuffer
+// 	}
+// }
+
+uint16_t usart0_read_char(volatile usart_meta* meta) {
+	if (!rbuffer_empty(&meta->rb_rx)) {
+		return (((meta->usart_error & USART_RX_ERROR_MASK) << 8) | (uint16_t)rbuffer_remove(&meta->rb_rx));
 	}
 	else {
-		return (((usart0_meta.usart_error & USART_RX_ERROR_MASK) << 8) | USART_NO_DATA);		// Empty ringbuffer
+		return (((meta->usart_error & USART_RX_ERROR_MASK) << 8) | USART_NO_DATA);		// Empty ringbuffer
 	}
 }
 
@@ -110,7 +110,7 @@ void usart0_close(void) {
 	while(!rbuffer_empty(&usart0_meta.rb_tx)); 		// Wait for Tx to finish all character in ring buffer
 	while(!(USART0.STATUS & USART_DREIF_bm)); 		// Wait for Tx unit to finish the last character of ringbuffer
 
-	// _delay_ms(200); 								// Extra safety for Tx to finish!
+	_delay_ms(200); 								// Extra safety for Tx to finish!
 
 	USART0.CTRLB &= ~USART_RXEN_bm; 				// Disable Rx unit
 	USART0.CTRLB &= ~USART_TXEN_bm; 				// Disable Rx unit
