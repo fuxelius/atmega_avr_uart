@@ -70,7 +70,6 @@ void usart0_send_char(volatile usart_meta* meta, char c) {
 }
 
 void usart0_init(volatile usart_meta* meta, uint16_t baud_rate) {
-	// meta->stream = usart0_stream;
 	rbuffer_init(&meta->rb_rx);								// Init Rx buffer
 	rbuffer_init(&meta->rb_tx);								// Init Tx buffer
 	usart0_port_init(meta);									// Defined in uart_settings.h     <----------------------------- UUGH!
@@ -114,7 +113,6 @@ int usart0_print_char(char c, FILE *stream) {
     usart0_send_char(&usart0, c);							
     return 0; 
 }
-
 FILE usart0_stream = FDEV_SETUP_STREAM(usart0_print_char, NULL, _FDEV_SETUP_WRITE);
 #endif
 

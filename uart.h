@@ -43,9 +43,10 @@ typedef struct {
 // USART META STRUCT
 typedef struct { 
 	USART_t* usart;					// USART device ptr
-    // FILE stream;				    // File stream
     // PORT
-    // PIN1 & 2
+    // PORTMUX
+    // TXPIN
+    // RXPIN
 	volatile ringbuffer rb_rx;		// Receive 
 	volatile ringbuffer rb_tx;		// Transmit
 	volatile uint8_t usart_error;	// Holds error from RXDATAH        
