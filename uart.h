@@ -6,6 +6,7 @@
  *          Date:     Uppsala, 2023-05-08          
  */
 
+#include <avr/io.h>
 #include <stdio.h>
 #include <stdint.h>
 
@@ -40,13 +41,12 @@ typedef struct {
     volatile uint8_t  count;         
 } ringbuffer;
 
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // USART META STRUCT
 typedef struct { 
 	USART_t* usart;					// USART device ptr
-    // PORT
-    // PORTMUX
-    // TXPIN
-    // RXPIN
+    PORT_t*  port;                  // PORT
+    uint8_t routea;                 // PORTMUX.USARTROUTEA
 	volatile ringbuffer rb_rx;		// Receive 
 	volatile ringbuffer rb_tx;		// Transmit
 	volatile uint8_t usart_error;	// Holds error from RXDATAH        
@@ -60,6 +60,7 @@ void usart0_send_string(volatile usart_meta* meta, char* str, uint8_t len);
 uint16_t usart0_read_char(volatile usart_meta* meta);
 void usart0_close(volatile usart_meta* meta);
 
+// ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 #ifdef USART0_ENABLE
 extern FILE usart0_stream;
 extern volatile usart_meta usart0;

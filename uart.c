@@ -6,6 +6,7 @@
  *          Date:     Uppsala, 2023-05-08           
  */
 
+#include <avr/io.h>
 #include <util/atomic.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -56,6 +57,10 @@ volatile usart_meta usart0 = {.usart = &USART0};
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // USART FUNCTIONS
+
+void usart0_set(volatile usart_meta* meta) {
+
+}
 
 void usart0_port_init(volatile usart_meta* meta) {
     asm("NOP");                         // PORTMUX
