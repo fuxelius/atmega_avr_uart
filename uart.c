@@ -65,10 +65,16 @@ void usart0_set(volatile usart_meta* meta, PORT_t*  port, uint8_t route, uint8_t
 	meta->rx_pin = rx_pin;
 }
 
+// void usart0_port_init(volatile usart_meta* meta) {
+//     asm("NOP");                         // PORTMUX
+//     PORTA.DIR &= ~PIN1_bm;			    // Rx
+//     PORTA.DIR |= PIN0_bm;			    // Tx
+// }
+
 void usart0_port_init(volatile usart_meta* meta) {
-    asm("NOP");                         // PORTMUX
-    PORTA.DIR &= ~PIN1_bm;			    // Rx
-    PORTA.DIR |= PIN0_bm;			    // Tx
+    PORTMUX.USARTROUTEA = meta->route;   			// Set route
+    meta->port->DIR &= ~meta->rx_pin;			    // Rx
+    meta->port->DIR |= meta->tx_pin;			    // Tx
 }
 
 void usart0_send_char(volatile usart_meta* meta, char c) {
