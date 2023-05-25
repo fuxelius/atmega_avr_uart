@@ -58,12 +58,12 @@ typedef struct {
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // USART FUNCTIONS
-void usart0_set(volatile usart_meta* meta, PORT_t*  port, uint8_t route, uint8_t tx_pin, uint8_t rx_pin);
-void usart0_init(volatile usart_meta* meta, uint16_t baud_rate);
-void usart0_send_char(volatile usart_meta* meta, char c);
-void usart0_send_string(volatile usart_meta* meta, char* str, uint8_t len);
-uint16_t usart0_read_char(volatile usart_meta* meta);
-void usart0_close(volatile usart_meta* meta);
+void usart_set(volatile usart_meta* meta, PORT_t*  port, uint8_t route, uint8_t tx_pin, uint8_t rx_pin);
+void usart_init(volatile usart_meta* meta, uint16_t baud_rate);
+void usart_send_char(volatile usart_meta* meta, char c);
+void usart_send_string(volatile usart_meta* meta, char* str, uint8_t len);
+uint16_t usart_read_char(volatile usart_meta* meta);
+void usart_close(volatile usart_meta* meta);
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 #ifdef USART0_ENABLE

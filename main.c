@@ -17,20 +17,23 @@ int main(void) {
     uint16_t c;
     uint8_t j=0;
 
+
     // [PORTMUX_USART0_DEFAULT_gc, PORTMUX_USART0_ALT1_gc, PORTMUX_USART0_NONE_gc]
+
+
     // (0) - USART settings; 
-    usart0_set(&usart0, &PORTA, PORTMUX_USART0_DEFAULT_gc, PIN0_bm, PIN1_bm);
+    usart_set(&usart0, &PORTA, PORTMUX_USART0_DEFAULT_gc, PIN0_bm, PIN1_bm);
 
     while (1) {
 
         // (1) - Init USART
-        usart0_init(&usart0, (uint16_t)BAUD_RATE(9600));
+        usart_init(&usart0, (uint16_t)BAUD_RATE(9600));
 
         // (2) - Enable global interrupts
         sei(); 
 
         // (3) - Send string to USART
-        usart0_send_string(&usart0, "\r\n\r\nPEACE BRO!\r\n\r\n", 18);
+        usart_send_string(&usart0, "\r\n\r\nPEACE BRO!\r\n\r\n", 18);
 
         // (4) - Use fprintf to write to stream
         fprintf(&usart0_stream, "Hello world!\r\n");
@@ -41,7 +44,7 @@ int main(void) {
             _delay_ms(500);
 
             // (6) - Get USART input by polling ringbuffer
-            while(!((c = usart0_read_char(&usart0)) & USART_NO_DATA)) {
+            while(!((c = usart_read_char(&usart0)) & USART_NO_DATA)) {
 
                 if (c & USART_PARITY_ERROR) {
                     fprintf(&usart0_stream, "USART PARITY ERROR: ");
@@ -54,7 +57,7 @@ int main(void) {
                 }
 
                 // (7) - Send single character to USART
-                usart0_send_char(&usart0, (char)c);
+                usart_send_char(&usart0, (char)c);
             }
         }
 
@@ -62,7 +65,7 @@ int main(void) {
         fprintf(&usart0_stream, "\r\n\r\n<-<->->");
 
         // (9) - Close USART0
-        usart0_close(&usart0);    
+        usart_close(&usart0);    
 
         // (10) - Clear global interrupts
         cli();
