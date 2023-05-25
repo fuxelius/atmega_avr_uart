@@ -114,15 +114,14 @@ void usart_close(volatile usart_meta* meta) {
 
 	_delay_ms(200); 											// Extra safety for Tx to finish!
 
-	meta->usart->CTRLB &=  ~(USART_RXEN_bm | USART_TXEN_bm); 	// Disable Tx, Rx unit
+	meta->usart->CTRLB &= ~(USART_RXEN_bm | USART_TXEN_bm); 	// Disable Tx, Rx unit
 	meta->usart->CTRLA &= ~(USART_RXCIE_bm | USART_DREIE_bm); 	// Disable Tx, Rx interrupt
 
-	// Disable PORTMUX pins
-	// PORTMUX_USART0_NONE_gc
+	// Disable PORTMUX pins [PORTMUX_USART0_NONE_gc]
 }
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-// SPECIAL STREAM SETUP
+// STREAM SETUP
 #ifdef USART0_ENABLE
 int usart0_print_char(char c, FILE *stream) { 
     usart_send_char(&usart0, c);							
