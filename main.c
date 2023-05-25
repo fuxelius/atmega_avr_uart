@@ -1,9 +1,9 @@
 /*
- *     test.c
+ *     main.c
  *
  *          Project:  Test of USART for ATmega4808
  *          Author:   Hans-Henrik Fuxelius   
- *          Date:     Uppsala, 2023-05-08          
+ *          Date:     Uppsala, 2023-05-20          
  */
 
 #include <avr/io.h>

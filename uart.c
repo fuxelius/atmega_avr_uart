@@ -3,7 +3,7 @@
  *
  *          Project:  UART for megaAVR, tinyAVR & AVR DA
  *          Author:   Hans-Henrik Fuxelius   
- *          Date:     Uppsala, 2023-05-08           
+ *          Date:     Uppsala, 2023-05-20           
  */
 
 #include <avr/io.h>
@@ -55,9 +55,20 @@ char rbuffer_remove(volatile ringbuffer* rb) {
 volatile usart_meta usart0 = {.usart = &USART0};
 #endif
 
+#ifdef USART1_ENABLE
+volatile usart_meta usart1 = {.usart = &USART1};
+#endif
+
+#ifdef USART2_ENABLE
+volatile usart_meta usart2 = {.usart = &USART2};
+#endif
+
+#ifdef USART3_ENABLE
+volatile usart_meta usart3 = {.usart = &USART3};
+#endif
+
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // USART FUNCTIONS
-
 void usart_set(volatile usart_meta* meta, PORT_t*  port, uint8_t route, uint8_t tx_pin, uint8_t rx_pin) {
 	meta->port = port;
 	meta->route = route;
@@ -65,22 +76,16 @@ void usart_set(volatile usart_meta* meta, PORT_t*  port, uint8_t route, uint8_t 
 	meta->rx_pin = rx_pin;
 }
 
-// void usart0_port_init(volatile usart_meta* meta) {
-//     asm("NOP");                         // PORTMUX
-//     PORTA.DIR &= ~PIN1_bm;			    // Rx
-//     PORTA.DIR |= PIN0_bm;			    // Tx
-// }
-
 void usart_port_init(volatile usart_meta* meta) {
-    PORTMUX.USARTROUTEA |= meta->route;   			// Set route
-    meta->port->DIR &= ~meta->rx_pin;			    // Rx
-    meta->port->DIR |= meta->tx_pin;			    // Tx
+    PORTMUX.USARTROUTEA |= meta->route;   					// Set route
+    meta->port->DIR &= ~meta->rx_pin;			    		// Rx
+    meta->port->DIR |= meta->tx_pin;			    		// Tx
 }
 
 void usart_send_char(volatile usart_meta* meta, char c) {
 	while(rbuffer_full(&meta->rb_tx));
 	rbuffer_insert(c, &meta->rb_tx);
-	meta->usart->CTRLA |= USART_DREIE_bm;			// Enable Tx interrupt 
+	meta->usart->CTRLA |= USART_DREIE_bm;					// Enable Tx interrupt 
 }
 
 void usart_init(volatile usart_meta* meta, uint16_t baud_rate) {
@@ -108,16 +113,13 @@ uint16_t usart_read_char(volatile usart_meta* meta) {
 }
 
 void usart_close(volatile usart_meta* meta) {
-	while(!rbuffer_empty(&meta->rb_tx)); 				// Wait for Tx to finish all character in ring buffer
-	while(!(meta->usart->STATUS & USART_DREIF_bm)); 	// Wait for Tx unit to finish the last character of ringbuffer
+	while(!rbuffer_empty(&meta->rb_tx)); 						// Wait for Tx to finish all character in ring buffer
+	while(!(meta->usart->STATUS & USART_DREIF_bm)); 			// Wait for Tx unit to finish the last character of ringbuffer
 
-	_delay_ms(200); 									// Extra safety for Tx to finish!
+	_delay_ms(200); 											// Extra safety for Tx to finish!
 
-	meta->usart->CTRLB &= ~USART_RXEN_bm; 				// Disable Rx unit
-	meta->usart->CTRLB &= ~USART_TXEN_bm; 				// Disable Rx unit
-
-	meta->usart->CTRLA &= ~USART_RXCIE_bm;				// Disable Rx interrupt
-	meta->usart->CTRLA &= ~USART_DREIE_bm;				// Disable Tx interrupt
+	meta->usart->CTRLB &=  ~(USART_RXEN_bm | USART_TXEN_bm); 	// Disable Tx, Rx unit
+	meta->usart->CTRLA &= ~(USART_RXCIE_bm | USART_DREIE_bm); 	// Disable Tx, Rx interrupt
 
 	// Disable PORTMUX pins
 	// PORTMUX_USART0_NONE_gc
@@ -131,6 +133,30 @@ int usart0_print_char(char c, FILE *stream) {
     return 0; 
 }
 FILE usart0_stream = FDEV_SETUP_STREAM(usart0_print_char, NULL, _FDEV_SETUP_WRITE);
+#endif
+
+#ifdef USART1_ENABLE
+int usart1_print_char(char c, FILE *stream) { 
+    usart_send_char(&usart1, c);							
+    return 0; 
+}
+FILE usart1_stream = FDEV_SETUP_STREAM(usart1_print_char, NULL, _FDEV_SETUP_WRITE);
+#endif
+
+#ifdef USART2_ENABLE
+int usart2_print_char(char c, FILE *stream) { 
+    usart_send_char(&usart2, c);							
+    return 0; 
+}
+FILE usart2_stream = FDEV_SETUP_STREAM(usart2_print_char, NULL, _FDEV_SETUP_WRITE);
+#endif
+
+#ifdef USART3_ENABLE
+int usart3_print_char(char c, FILE *stream) { 
+    usart_send_char(&usart3, c);							
+    return 0; 
+}
+FILE usart3_stream = FDEV_SETUP_STREAM(usart3_print_char, NULL, _FDEV_SETUP_WRITE);
 #endif
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
@@ -156,8 +182,34 @@ void isr_usart_dre_vect(volatile usart_meta* meta) {
 ISR(USART0_RXC_vect) {
 	isr_usart_rxc_vect(&usart0);
 }
-
 ISR(USART0_DRE_vect) {
 	isr_usart_dre_vect(&usart0);
+}
+#endif
+
+#ifdef USART1_ENABLE
+ISR(USART1_RXC_vect) {
+	isr_usart_rxc_vect(&usart1);
+}
+ISR(USART1_DRE_vect) {
+	isr_usart_dre_vect(&usart1);
+}
+#endif
+
+#ifdef USART2_ENABLE
+ISR(USART2_RXC_vect) {
+	isr_usart_rxc_vect(&usart2);
+}
+ISR(USART2_DRE_vect) {
+	isr_usart_dre_vect(&usart2);
+}
+#endif
+
+#ifdef USART3_ENABLE
+ISR(USART3_RXC_vect) {
+	isr_usart_rxc_vect(&usart3);
+}
+ISR(USART3_DRE_vect) {
+	isr_usart_dre_vect(&usart3);
 }
 #endif

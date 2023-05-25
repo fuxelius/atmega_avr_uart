@@ -3,7 +3,7 @@
  *
  *          Project:  UART for megaAVR, tinyAVR & AVR DA
  *          Author:   Hans-Henrik Fuxelius   
- *          Date:     Uppsala, 2023-05-08          
+ *          Date:     Uppsala, 2023-05-20          
  */
 
 #include <avr/io.h>
@@ -15,13 +15,11 @@
 #define RBUFFER_SIZE 32  
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
-// ENABLE USART UNITS (UNCOMMENT USARTn TO ENABLE)
+// UNCOMMENT USARTn TO ENABLE 
 #define USART0_ENABLE
-// #define USART1_ENABLE
-// #define USART2_ENABLE
+#define USART1_ENABLE
+#define USART2_ENABLE
 // #define USART3_ENABLE
-// #define USART4_ENABLE
-// #define USART5_ENABLE
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 #define USART_BUFFER_OVERFLOW    0x6400      // ==USART_BUFOVF_bm  
@@ -45,12 +43,10 @@ typedef struct {
 // USART META STRUCT
 typedef struct { 
 	USART_t* usart;					// USART device ptr
-
     PORT_t*  port;                  // PORT device ptr
     uint8_t route;                  // PORTMUX.USARTROUTE A B
     uint8_t rx_pin;                 // Rx PIN
     uint8_t tx_pin;                 // Tx PIN
-    
 	volatile ringbuffer rb_rx;		// Receive 
 	volatile ringbuffer rb_tx;		// Transmit
 	volatile uint8_t usart_error;	// Holds error from RXDATAH        
@@ -69,4 +65,19 @@ void usart_close(volatile usart_meta* meta);
 #ifdef USART0_ENABLE
 extern FILE usart0_stream;
 extern volatile usart_meta usart0;
+#endif
+
+#ifdef USART1_ENABLE
+extern FILE usart1_stream;
+extern volatile usart_meta usart1;
+#endif
+
+#ifdef USART2_ENABLE
+extern FILE usart2_stream;
+extern volatile usart_meta usart2;
+#endif
+
+#ifdef USART3_ENABLE
+extern FILE usart3_stream;
+extern volatile usart_meta usart3;
 #endif
