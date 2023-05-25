@@ -3,7 +3,7 @@
  *
  *          Project:  UART for megaAVR, tinyAVR & AVR DA
  *          Author:   Hans-Henrik Fuxelius   
- *          Date:     Uppsala, 2023-05-20           
+ *          Date:     Uppsala, 2023-05-24           
  */
 
 #include <avr/io.h>
@@ -76,12 +76,6 @@ void usart_set(volatile usart_meta* meta, PORT_t*  port, uint8_t route, uint8_t 
 	meta->rx_pin = rx_pin;
 }
 
-void usart_port_init(volatile usart_meta* meta) {
-    PORTMUX.USARTROUTEA |= meta->route;   					// Set route
-    meta->port->DIR &= ~meta->rx_pin;			    		// Rx
-    meta->port->DIR |= meta->tx_pin;			    		// Tx
-}
-
 void usart_send_char(volatile usart_meta* meta, char c) {
 	while(rbuffer_full(&meta->rb_tx));
 	rbuffer_insert(c, &meta->rb_tx);
@@ -91,7 +85,9 @@ void usart_send_char(volatile usart_meta* meta, char c) {
 void usart_init(volatile usart_meta* meta, uint16_t baud_rate) {
 	rbuffer_init(&meta->rb_rx);								// Init Rx buffer
 	rbuffer_init(&meta->rb_tx);								// Init Tx buffer
-	usart_port_init(meta);									// 
+    PORTMUX.USARTROUTEA |= meta->route;   					// Set route
+    meta->port->DIR &= ~meta->rx_pin;			    		// Rx PIN input
+    meta->port->DIR |= meta->tx_pin;			    		// Tx PIN output
     meta->usart->BAUD = baud_rate; 							// Set BAUD rate
 	meta->usart->CTRLB |= USART_RXEN_bm | USART_TXEN_bm; 	// Enable Rx & Enable Tx 
 	meta->usart->CTRLA |= USART_RXCIE_bm; 					// Enable Rx interrupt 
