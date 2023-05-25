@@ -46,11 +46,11 @@ typedef struct {
 typedef struct { 
 	USART_t* usart;					// USART device ptr
 
-    PORT_t*  port;                  // PORT
+    PORT_t*  port;                  // PORT device ptr
     uint8_t route;                  // PORTMUX.USARTROUTE A B
-    uint8_t tx_pin;                 // Tx PIN
     uint8_t rx_pin;                 // Rx PIN
-
+    uint8_t tx_pin;                 // Tx PIN
+    
 	volatile ringbuffer rb_rx;		// Receive 
 	volatile ringbuffer rb_tx;		// Transmit
 	volatile uint8_t usart_error;	// Holds error from RXDATAH        
