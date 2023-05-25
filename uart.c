@@ -58,8 +58,11 @@ volatile usart_meta usart0 = {.usart = &USART0};
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // USART FUNCTIONS
 
-void usart0_set(volatile usart_meta* meta) {
-
+void usart0_set(volatile usart_meta* meta, PORT_t*  port, uint8_t route, uint8_t tx_pin, uint8_t rx_pin) {
+	meta->port = port;
+	meta->route = route;
+	meta->tx_pin = tx_pin;
+	meta->rx_pin = rx_pin;
 }
 
 void usart0_port_init(volatile usart_meta* meta) {
@@ -109,6 +112,9 @@ void usart0_close(volatile usart_meta* meta) {
 
 	meta->usart->CTRLA &= ~USART_RXCIE_bm;				// Disable Rx interrupt
 	meta->usart->CTRLA &= ~USART_DREIE_bm;				// Disable Tx interrupt
+
+	// Disable PORTMUX pins
+	// PORTMUX_USART0_NONE_gc
 }
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----

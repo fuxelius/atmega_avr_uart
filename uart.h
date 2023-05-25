@@ -45,8 +45,12 @@ typedef struct {
 // USART META STRUCT
 typedef struct { 
 	USART_t* usart;					// USART device ptr
+
     PORT_t*  port;                  // PORT
-    uint8_t routea;                 // PORTMUX.USARTROUTEA
+    uint8_t route;                  // PORTMUX.USARTROUTE A B
+    uint8_t tx_pin;                 // Tx PIN
+    uint8_t rx_pin;                 // Rx PIN
+
 	volatile ringbuffer rb_rx;		// Receive 
 	volatile ringbuffer rb_tx;		// Transmit
 	volatile uint8_t usart_error;	// Holds error from RXDATAH        
@@ -54,6 +58,7 @@ typedef struct {
 
 // ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ---- ----
 // USART FUNCTIONS
+void usart0_set(volatile usart_meta* meta, PORT_t*  port, uint8_t route, uint8_t tx_pin, uint8_t rx_pin);
 void usart0_init(volatile usart_meta* meta, uint16_t baud_rate);
 void usart0_send_char(volatile usart_meta* meta, char c);
 void usart0_send_string(volatile usart_meta* meta, char* str, uint8_t len);
